@@ -1,0 +1,44 @@
+version: '3'
+services:
+    nginx_self_intro:
+        container_name: nginx_self_intro
+        image: nginx
+        ports:
+            - 8080:80
+        volumes:
+            - ./api:/var/www/html
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - api_self_intro
+    api_self_intro:
+        build: ./api
+        container_name: api_self_intro
+        volumes:
+            - ./api:/var/www/html
+    app_self_intro:
+        build: ./app
+        container_name: app_self_intro
+        tty: true
+        volumes:
+            - ./app:/home/app
+        environment:
+            PORT: '80'
+            HOST: '0.0.0.0'
+        ports:
+            - 8000:80
+    db_self_intro:
+        image: mysql:5.7
+        container_name: db_self_intro
+        restart: always
+        volumes:
+            - ./mysql_lib:/var/lib/mysql
+            - ./mysql_conf:/etc/mysql/conf.d
+        environment:
+                MYSQL_DATABASE: selfIntro
+                MYSQL_USER: selfIntro
+                MYSQL_PASSWORD: self%Wgg-Intro
+                MYSQL_ROOT_PASSWORD: self%Wgg-Intro
+                TZ: "Asia/Tokyo"
+        command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci"
+        ports:
+            - 3306:3306
