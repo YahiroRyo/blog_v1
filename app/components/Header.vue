@@ -7,8 +7,8 @@
         >YAPPI BLOG</v-toolbar-title
       >
       <template
-        v-if="$store.state.windowState.scrollY == 0"
         v-for="(router, index) in routers"
+        v-if="$store.state.windowState.scrollY == 0 && !router.isHide"
       >
         <v-scroll-y-reverse-transition>
           <v-scroll-y-transition>
@@ -46,11 +46,12 @@
           v-for="(router, index) in routers"
           :key="index"
           @click="$router.push(router.to)"
+          v-if="!router.isHide"
         >
           <v-icon>
             {{ router.icon }}
           </v-icon>
-          <v-list-item-title>{{ router.title }}</v-list-item-title>
+          <v-list-item-title class="ml-3">{{ router.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -70,7 +71,7 @@ export default {
   },
   computed: {
     isOpenHeaderNav: {
-      get() {
+      get(this: { header: any; $store: any }) {
         if (this.header.isClickNavIcon && this.$store.state.windowState.scrollY != 0) {
           return true;
         } else if (
