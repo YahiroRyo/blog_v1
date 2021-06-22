@@ -1,8 +1,11 @@
 <template>
   <v-app>
-    <Header />
+    <TheHeader @click="header.isClickNavIcon = !header.isClickNavIcon" />
+    <TheHeaderNav
+      :is-open-header-nav="header.isClickNavIcon && $store.state.windowState.scrollY != 0"
+    />
     <v-main>
-      <v-container class="d-flex" fluid>
+      <v-container style="height: 100vh" class="d-flex" fluid>
         <nuxt />
       </v-container>
     </v-main>
@@ -16,9 +19,20 @@
 </style>
 
 <script lang="ts">
-import Header from "~/components/header.vue";
+import TheHeader from "~/components/TheHeader.vue";
+import TheHeaderNav from "~/components/TheHeaderNav.vue";
 export default {
-  components: { Header },
+  components: {
+    TheHeader,
+    TheHeaderNav,
+  },
+  data(): any {
+    return {
+      header: {
+        isClickNavIcon: false as boolean,
+      },
+    };
+  },
   methods: {
     scrollHandle(this: { $store: any }): void {
       this.$store.commit("windowState/setScrollX", window.pageXOffset);
