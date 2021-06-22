@@ -7,7 +7,7 @@
         >YAPPI BLOG</v-toolbar-title
       >
       <template
-        v-if="$store.state.windowState.scrollHeight == 0"
+        v-if="$store.state.windowState.scrollY == 0"
         v-for="(router, index) in routers"
       >
         <v-scroll-y-reverse-transition>
@@ -26,7 +26,7 @@
       <v-scroll-y-reverse-transition>
         <v-scroll-y-transition>
           <v-app-bar-nav-icon
-            v-if="$store.state.windowState.scrollHeight != 0"
+            v-if="$store.state.windowState.scrollY != 0"
             class="white--text grey"
             @click="header.isClickNavIcon = !header.isClickNavIcon"
           ></v-app-bar-nav-icon>
@@ -71,14 +71,11 @@ export default {
   computed: {
     isOpenHeaderNav: {
       get() {
-        if (
-          this.header.isClickNavIcon &&
-          this.$store.state.windowState.scrollHeight != 0
-        ) {
+        if (this.header.isClickNavIcon && this.$store.state.windowState.scrollY != 0) {
           return true;
         } else if (
           this.header.isClickNavIcon &&
-          this.$store.state.windowState.scrollHeight == 0
+          this.$store.state.windowState.scrollY == 0
         ) {
           this.header.isClickNavIcon = false;
         }
