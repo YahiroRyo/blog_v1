@@ -9,7 +9,10 @@ create-nuxt-app \
 @nuxt/types \
 @nuxt/typescript-build \
 @nuxtjs/axios \
-nuxt-typed-vuex
+nuxt-typed-vuex \
+@nuxtjs/markdownit \
+markdown-it-attrs \
+markdown-it-div 
 
 RUN mkdir /home/app
 WORKDIR /home/app
