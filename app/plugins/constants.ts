@@ -9,9 +9,21 @@ const ROUTERS = [
     },
     {
         to: "/blogs",
-        icon: 'mdi-code-not-equal-variant',
+        icon: 'mdi-notebook-outline',
         isHide: false,
         title: 'ブログ一覧',
+    },
+    {
+        to: "/works",
+        icon: 'mdi-code-not-equal-variant',
+        isHide: false,
+        title: '作品',
+    },
+    {
+        to: "/skills",
+        icon: 'mdi-arm-flex',
+        isHide: false,
+        title: 'スキル',
     },
     {
         to: "/self-intro",

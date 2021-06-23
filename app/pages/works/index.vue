@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Blogs num="10" />
+    <Works num="10" />
   </div>
 </template>
 <script lang="ts">
-import Blogs from "~/components/Blogs.vue";
+import Works from "~/components/Works.vue";
 
 export default {
   components: {
-    Blogs,
+    Works,
   },
   data(): void {
     return {} as any;
