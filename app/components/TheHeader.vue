@@ -27,7 +27,10 @@
         <v-scroll-y-transition>
           <v-app-bar-nav-icon
             v-if="$store.state.windowState.scrollY != 0"
-            class="white--text grey"
+            :class="{
+              'white--text grey': !isOpen,
+              'black--text white': isOpen,
+            }"
             @click="$emit('click')"
           ></v-app-bar-nav-icon>
         </v-scroll-y-transition>
@@ -38,6 +41,7 @@
 
 <script lang="ts">
 export default {
+  props: ["isOpen"],
   data(this: { $ROUTERS: Array<any> }): any {
     return {
       header: {
