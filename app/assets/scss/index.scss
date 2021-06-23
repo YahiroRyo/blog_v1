@@ -1,0 +1,12 @@
+.main-img {
+    height: 500px;
+    width: 100vw;
+    background-image: url(~/assets/img/index/main_img.jpg);
+    background-size: cover;
+    background-position: 50% 50%;
+}
+.main-img__title {
+    background-color: rgba(0, 0, 0, .3);
+    color: white;
+    padding: 50px;
+}
