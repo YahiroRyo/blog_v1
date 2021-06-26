@@ -5,9 +5,9 @@
         知識欲のままに学習を続ける.
       </h1>
     </v-row>
-    <TitleHome title="WORKS" />
+    <Title title="WORKS" />
     <Works num="3" />
-    <TitleHome title="BLOGS" />
+    <Title title="BLOGS" />
     <Blogs num="3" />
   </div>
 </template>
@@ -19,12 +19,12 @@
 <script>
 import Blogs from "~/components/Blogs.vue";
 import Works from "~/components/Works.vue";
-import TitleHome from "~/components/TitleHome.vue";
+import Title from "~/components/Title.vue";
 export default {
   components: {
     Blogs,
     Works,
-    TitleHome,
+    Title,
   },
 };
 </script>
