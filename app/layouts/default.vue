@@ -1,12 +1,6 @@
 <template>
   <v-app>
-    <TheHeader
-      @click="header.isClickNavIcon = !header.isClickNavIcon"
-      :is-open="header.isClickNavIcon"
-    />
-    <TheHeaderNav
-      :is-open-header-nav="header.isClickNavIcon && $store.state.windowState.scrollY != 0"
-    />
+    <TheHeader />
     <v-main>
       <v-container style="min-height: 100vh" class="d-flex" fluid>
         <nuxt />
@@ -17,6 +11,10 @@
 </template>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+body {
+  font-family: "Noto Sans JP", sans-serif;
+}
 .v-cursor-pointer {
   cursor: pointer;
 }
@@ -24,19 +22,19 @@
 
 <script lang="ts">
 import TheHeader from "~/components/TheHeader.vue";
-import TheHeaderNav from "~/components/TheHeaderNav.vue";
 import TheFooter from "~/components/TheFooter.vue";
+
 export default {
   components: {
     TheHeader,
-    TheHeaderNav,
     TheFooter,
   },
-  data(): any {
+  data(this: { $ROUTERS: Array<any> }): any {
     return {
       header: {
         isClickNavIcon: false as boolean,
       },
+      routers: this.$ROUTERS as Array<any>,
     };
   },
   methods: {
@@ -44,12 +42,24 @@ export default {
       this.$store.commit("windowState/setScrollX", window.pageXOffset);
       this.$store.commit("windowState/setScrollY", window.pageYOffset);
     },
+    resizeHandle(this: { $store: any }): void {
+      if (window.innerWidth <= 1260) {
+        this.$store.commit("windowState/setIsMobile", true);
+      } else {
+        this.$store.commit("windowState/setIsMobile", false);
+      }
+    },
   },
-  created(this: { scrollHandle: Function }): void {
+  created(this: { scrollHandle: Function; resizeHandle: Function }): void {
     window.addEventListener("scroll", () => {
       this.scrollHandle();
     });
     this.scrollHandle();
+
+    window.addEventListener("resize", () => {
+      this.resizeHandle();
+    });
+    this.resizeHandle();
   },
 };
 </script>
