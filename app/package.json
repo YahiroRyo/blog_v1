@@ -9,6 +9,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/markdownit": "^2.0.0",
     "core-js": "^3.9.1",
     "markdown-it-attrs": "^4.0.0",
@@ -19,5 +20,9 @@
     "@nuxt/types": "^2.15.3",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/vuetify": "^1.11.3"
-  }
+  },
+  "description": "## Build Setup",
+  "main": "nuxt.config.js",
+  "author": "",
+  "license": "ISC"
 }
