@@ -6,9 +6,10 @@
         height="300"
         @mouseover="isHover = true"
         @mouseleave="isHover = false"
-        :style="'background-image: url(' + img + ')'"
+        @click="$router.push(to)"
+        :style="'background-image: url(' + img + '); background-size: cover'"
       >
-        <v-overlay absolute :value="isHover" class="text-h6">
+        <v-overlay absolute :value="isHover" class="text-h4">
           {{ title }}
         </v-overlay>
       </v-card>
@@ -18,7 +19,7 @@
 
 <script lang="ts">
 export default {
-  props: ["img", "title"],
+  props: ["img", "title", "to"],
   data(): any {
     return {
       isHover: false as boolean,
