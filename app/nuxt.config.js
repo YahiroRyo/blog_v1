@@ -6,7 +6,6 @@ export default {
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - app',
@@ -30,7 +29,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/constants.ts' }
+    { src: '~/plugins/constants.ts' },
+    { src: '~/plugins/axios-accessor.ts' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -47,6 +47,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/markdownit',
+    '@nuxtjs/axios'
   ],
   markdownit: {
     preset: 'default',
@@ -73,8 +74,14 @@ export default {
       }
     }
   },
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+  axios: {
+    proxy: true,
+    prefix: '/api/',
+  },
+  proxy: {
+    '/api/': {target: process.env.API_URL, pathRewrite: {'^/api/': '/'}}
+  },
 }
