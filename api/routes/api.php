@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/blogs/get', [BlogController::class, 'index']);
+Route::get('/blog/get', [BlogController::class, 'show']);
+Route::post('/blog/create', [BlogController::class, 'create']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
