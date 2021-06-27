@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'auth_password' => env('CREATE_AUTH_PASSWORD'),
 
     /*
     |--------------------------------------------------------------------------
@@ -14,7 +15,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -27,7 +28,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -229,5 +230,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
 
 ];

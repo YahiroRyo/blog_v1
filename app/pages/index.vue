@@ -5,10 +5,10 @@
         知識欲のままに学習を続ける.
       </h1>
     </v-row>
-    <TitleHome title="WORKS" />
-    <Works num="3" />
-    <TitleHome title="BLOGS" />
-    <Blogs num="3" />
+    <Title title="WORKS" />
+    <Genre genre="works" num="3" />
+    <Title title="BLOGS" />
+    <Genre genre="blogs" num="3" />
   </div>
 </template>
 
@@ -17,14 +17,12 @@
 </style>
 
 <script>
-import Blogs from "~/components/Blogs.vue";
-import Works from "~/components/Works.vue";
-import TitleHome from "~/components/TitleHome.vue";
+import Genre from "~/components/Genre.vue";
+import Title from "~/components/Title.vue";
 export default {
   components: {
-    Blogs,
-    Works,
-    TitleHome,
+    Genre,
+    Title,
   },
 };
 </script>

@@ -1,14 +1,17 @@
 <template>
-  <div>
-    <Works num="10" />
+  <div class="mx-auto">
+    <Title title="作品一覧" />
+    <Genre genre="works" num="10" />
   </div>
 </template>
 <script lang="ts">
-import Works from "~/components/Works.vue";
+import Genre from "~/components/Genre.vue";
+import Title from "~/components/Title.vue";
 
 export default {
   components: {
-    Works,
+    Genre,
+    Title,
   },
   data(): void {
     return {} as any;
