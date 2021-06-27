@@ -2,8 +2,10 @@
   <v-app>
     <TheHeader />
     <v-main>
-      <v-container style="min-height: 100vh" class="d-flex" fluid>
-        <nuxt />
+      <v-container fluid>
+        <transition name="router-anim">
+          <nuxt />
+        </transition>
       </v-container>
     </v-main>
     <TheFooter />
@@ -17,6 +19,13 @@ body {
 }
 .v-cursor-pointer {
   cursor: pointer;
+  user-select: none;
+}
+.router-anim-enter {
+  opacity: 0;
+}
+.router-anim-enter-active {
+  transition: opacity 1s;
 }
 </style>
 
