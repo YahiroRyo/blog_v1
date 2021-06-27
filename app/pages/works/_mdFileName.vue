@@ -1,16 +1,13 @@
 <template>
-  <div v-html=""></div>
+  <MdFileName genre="work" :route-file-id="$route.params.mdFileName" />
 </template>
 
 <script lang="ts">
+import MdFileName from "~/components/MdFileName.vue";
+
 export default {
-  data(this: { $route: any }): any {
-    return {
-      md: null as any,
-    } as any;
-  },
-  created(): void {
-    // ここでmdファイルをfetch
+  components: {
+    MdFileName,
   },
 };
 </script>
