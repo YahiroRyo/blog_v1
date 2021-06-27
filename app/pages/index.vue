@@ -6,9 +6,9 @@
       </h1>
     </v-row>
     <Title title="WORKS" />
-    <Works num="3" />
+    <Genre genre="works" num="3" />
     <Title title="BLOGS" />
-    <Blogs num="3" />
+    <Genre genre="blogs" num="3" />
   </div>
 </template>
 
@@ -17,13 +17,11 @@
 </style>
 
 <script>
-import Blogs from "~/components/Blogs.vue";
-import Works from "~/components/Works.vue";
+import Genre from "~/components/Genre.vue";
 import Title from "~/components/Title.vue";
 export default {
   components: {
-    Blogs,
-    Works,
+    Genre,
     Title,
   },
 };
