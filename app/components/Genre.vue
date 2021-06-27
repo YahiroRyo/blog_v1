@@ -2,7 +2,11 @@
   <div class="mt-10">
     <v-row cols="15" v-if="result.length != 0" justify="center" align-content="center">
       <v-col v-for="(item, index) in result" :key="index" class="mb-10 mx-5">
-        <WorkPreview :title="item.title" :img="item.img" :to="`/blogs/${item.fileId}`" />
+        <WorkPreview
+          :title="item.title"
+          :img="item.img"
+          :to="`/${mode}/${item.fileId}`"
+        />
       </v-col>
     </v-row>
     <v-row v-else justify="center" align-content="center" style="height: 300px">
@@ -19,19 +23,21 @@ import WorkPreview from "~/components/WorkPreview.vue";
 import { $axios } from "~/utils/api";
 
 export default {
-  props: { num: { type: String } },
+  props: { num: { type: String }, genre: { type: String } },
   components: {
     WorkPreview,
   },
-  data(props: { num: String }): any {
+  data(props: { num: String; genre: String }): any {
     return {
       fetchNum: Number(props.num) as Number,
       result: [] as Array<any>,
+      mode: props.genre as string,
     } as any;
   },
   async created(this: {
     result: Array<any>;
     fetchNum: Number;
+    mode: String;
     $config: any;
   }): Promise<void> {
     // Blogをnum分fetch
@@ -45,11 +51,8 @@ export default {
     if (this.fetchNum == -1) {
       // 50個fetch
       param.params.num = 50;
-      this.result = await $axios.$get(`/blogs/get`, param);
-    } else {
-      // fetchNum分fetch
-      this.result = await $axios.$get(`/blogs/get`, param);
     }
+    this.result = await $axios.$get(`/${this.mode}/get`, param);
   },
 };
 </script>
