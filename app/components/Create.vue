@@ -58,7 +58,7 @@
         </v-card>
       </v-dialog>
       <v-snackbar v-model="isCreated">
-        {{ genre == "blog" ? "ブログ" : "作品" }}を作成しました。
+        {{ mode == "blog" ? "ブログ" : "作品" }}を作成しました。
         <template v-slot:action="{ attrs }">
           <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
             Close
@@ -105,7 +105,7 @@ export default {
 
       isCreated: false as boolean,
       authPass: "" as string, // 認証パスワード
-      genre: props.genre as string,
+      mode: props.genre as string,
 
       // フォーム
       form: {
@@ -129,7 +129,7 @@ export default {
     async create(this: {
       authState: CREATE_STATE;
       errorState: ERROR_CODE;
-      genre: string;
+      mode: string;
       form: {
         title: string;
         img: string;
@@ -145,7 +145,7 @@ export default {
         md: this.form.md,
       };
       await $axios
-        .$post(`/${this.genre}/create`, param)
+        .$post(`/${this.mode}/create`, param)
         .then((responce) => {
           this.isCreated = true;
           this.isAuth();
