@@ -78,7 +78,6 @@
 
 <script lang="ts">
 import { $axios } from "~/utils/api";
-import { Route } from "vue-router";
 
 export default {
   props: { genre: { type: String }, routeFileId: { type: String } },
@@ -96,6 +95,7 @@ export default {
     mode: string;
     fileId: string;
     $md: { render: Function };
+    $store: any;
   }): Promise<void> {
     // ここでmdファイルをfetch
     const param = {
@@ -105,6 +105,7 @@ export default {
     };
     this.result = await $axios.$get(`/${this.mode}/get`, param);
     this.md = this.$md.render(this.result.md);
+    this.$store.commit("windowState/setTitle", this.result.title);
   },
 };
 </script>
