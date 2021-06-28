@@ -24,13 +24,5 @@
   "description": "## Build Setup",
   "main": "nuxt.config.js",
   "author": "",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/YahiroRyo/yappi-blog-app.git"
-  },
-  "bugs": {
-    "url": "https://github.com/YahiroRyo/yappi-blog-app/issues"
-  },
-  "homepage": "https://github.com/YahiroRyo/yappi-blog-app#readme"
+  "license": "ISC"
 }
