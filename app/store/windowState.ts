@@ -2,6 +2,7 @@ export const state = () => ({
     scrollX: 0 as Number,
     scrollY: 0 as Number,
     isMobile: false as boolean,
+    title: '' as string,
 });
 
 export const mutations = {
@@ -14,4 +15,7 @@ export const mutations = {
   setIsMobile(state: { isMobile: boolean; }, isMobile: boolean): void {
     state.isMobile = isMobile;
   },
+  setTitle(state: { title: string; }, title: string): void {
+    state.title = title;
+  }
 };
