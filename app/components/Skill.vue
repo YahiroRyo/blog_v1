@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title
       ><v-icon class="mr-2">mdi-{{ icon }}</v-icon
-      >{{ lang }}言語</v-card-title
+      >{{ lang }}</v-card-title
     >
     <!-- <v-card-text>・なぜ勉強しようと考えたか<br />{{ explain }}</v-card-text> -->
   </v-card>

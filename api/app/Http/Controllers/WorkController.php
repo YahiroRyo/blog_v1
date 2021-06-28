@@ -114,7 +114,9 @@ class WorkController extends Controller
                 $fileId,
                 ['alt' => 'media'],
             );
-            return json_encode(['isExists' => true, 'md' => $response->getBody()->getContents()]);
+            $title = Work::where('file_id', $fileId)
+                        ->first()['title'];
+            return json_encode(['isExists' => true, 'title' => $title, 'md' => $response->getBody()->getContents()]);
         } else {
             return json_encode(['isExists' => false, 'md' => '']);
         }

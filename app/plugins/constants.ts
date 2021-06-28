@@ -31,6 +31,18 @@ const ROUTERS = [
         isHide: false,
         title: '自己紹介',
     },
+    {
+        to: "/blogs/create",
+        icon: 'none',
+        isHide: true,
+        title: 'ブログを作成',
+    },
+    {
+        to: "/works/create",
+        icon: 'none',
+        isHide: true,
+        title: '作品を作成',
+    },
 ] as Array<any>
 
 export default (context: Context, inject: Function) => {

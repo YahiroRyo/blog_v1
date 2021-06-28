@@ -46,6 +46,11 @@ export default {
       routers: this.$ROUTERS as Array<any>,
     };
   },
+  head(this: { $store: any }): any {
+    return {
+      title: this.$store.state.windowState.title as string,
+    };
+  },
   methods: {
     scrollHandle(this: { $store: any }): void {
       this.$store.commit("windowState/setScrollX", window.pageXOffset);
