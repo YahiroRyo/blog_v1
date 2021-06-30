@@ -67,11 +67,18 @@
 </template>
 
 <script lang="ts">
-import Title from "~/components/Title.vue";
+import { Store } from "vuex";
+const Title = () => import("~/components/Title.vue");
 
 export default {
   components: {
     Title,
+  },
+  created(this: { $store: Store<any> }): void {
+    this.$store.commit(
+      "windowState/setDescription",
+      "YAPPIブログ | 自己紹介 エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます"
+    );
   },
 };
 </script>

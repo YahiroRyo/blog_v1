@@ -5,8 +5,9 @@
   </div>
 </template>
 <script lang="ts">
-import Genre from "~/components/Genre.vue";
-import Title from "~/components/Title.vue";
+import { Store } from "vuex";
+const Genre = () => import("~/components/Genre.vue");
+const Title = () => import("~/components/Title.vue");
 
 export default {
   components: {
@@ -15,6 +16,12 @@ export default {
   },
   data(): void {
     return {} as any;
+  },
+  created(this: { $store: Store<any> }): void {
+    this.$store.commit(
+      "windowState/setDescription",
+      "YAPPIブログ | ブログ一覧 エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます"
+    );
   },
 };
 </script>
