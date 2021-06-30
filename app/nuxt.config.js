@@ -2,8 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
-
+  ssr: true,
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -23,7 +22,17 @@ export default {
     ]
   },
   router: {
-    middleware: "titleMiddleware"
+    middleware: "titleMiddleware",
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: 'custom',
+        path: '*',
+        component: resolve(__dirname, 'pages/errors/404.vue')
+      })
+    }
+  },
+  generate: {
+    fallback: true,
   },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -49,13 +58,19 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/markdownit',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   markdownit: {
     preset: 'default',
+    html: true,
     linkify: true,
+    typography: true,
     breaks: true,
-    use: ['markdown-it-div', 'markdown-it-attrs'],
+    use: ['markdown-it-div', 'markdown-it-attrs', 'markdown-it-anchor', ['markdown-it-table-of-contents', {
+      includeLevel: [1, 2],
+      listType: 'ol',
+      containerClass: 'table-of-contents',
+    }]],
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
