@@ -7,6 +7,7 @@
           :img="item.img"
           :to="`/${mode}/${item.fileId}`"
         />
+        <p class="mt-10 text-center text-h6">{{ item.title }}</p>
       </v-col>
     </v-row>
     <v-row v-else justify="center" align-content="center" style="height: 300px">
@@ -21,6 +22,7 @@
 <script lang="ts">
 import WorkPreview from "~/components/WorkPreview.vue";
 import { $axios } from "~/utils/api";
+import { Store } from "vuex";
 
 export default {
   props: { num: { type: String }, genre: { type: String } },
@@ -39,6 +41,7 @@ export default {
     fetchNum: Number;
     mode: String;
     $config: any;
+    $store: Store<any>;
   }): Promise<void> {
     // Blogをnum分fetch
     // numが-1だったら50個ずつfetch
