@@ -19,10 +19,12 @@ use App\Http\Controllers\AuthController;
 Route::get('/blogs/get', [BlogController::class, 'index']);
 Route::get('/blog/get', [BlogController::class, 'show']);
 Route::post('/blog/create', [BlogController::class, 'create']);
+Route::post('/blog/delete', [BlogController::class, 'delete']);
 
 Route::get('/works/get', [WorkController::class, 'index']);
 Route::get('/work/get', [WorkController::class, 'show']);
 Route::post('/work/create', [WorkController::class, 'create']);
+Route::post('/work/delete', [WorkController::class, 'delete']);
 
 Route::get('/is-auth', [AuthController::class, 'is_auth']);
 Route::post('/auth', [AuthController::class, 'auth']);

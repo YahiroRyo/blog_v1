@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Work;
+use Illuminate\Support\Facades\DB;
 
 class WorkController extends Controller
 {
@@ -151,8 +152,22 @@ class WorkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request): void
     {
-        //
+        // $request->fileId
+        $file_id = $request->fileId;
+        DB::beginTransaction();
+        $work_query_where = Work::where('file_id', $file_id);
+        if ($work_query_where->exists()) {
+            $work_query_where->delete();
+            try {
+                $this->googleDrive->files->delete($file_id);
+            } catch (Exception $e) {
+                DB::rollback();
+            }
+            DB::commit();
+        } else {
+            throw new \Exception("そのfileIdは存在しません");
+        }
     }
 }
