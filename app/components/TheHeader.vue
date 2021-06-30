@@ -7,27 +7,35 @@
         @click="$router.push('/')"
         >YAPPI BLOG</v-toolbar-title
       >
-      <template
-        v-for="(router, index) in routers"
-        v-if="$store.state.windowState.scrollY == 0 && !router.isHide"
-      >
-        <v-scroll-y-reverse-transition>
-          <v-scroll-y-transition>
-            <div
-              class="black--text v-cursor-pointer ml-5"
-              @click="$router.push(router.to)"
-              :key="index"
-            >
-              {{ router.title }}
-            </div>
-          </v-scroll-y-transition>
-        </v-scroll-y-reverse-transition>
-      </template>
+      <no-ssr>
+        <template
+          v-for="(router, index) in routers"
+          v-if="
+            $store.state.windowState.scrollY == 0 &&
+            !$store.state.windowState.isMobile &&
+            !router.isHide
+          "
+        >
+          <v-scroll-y-reverse-transition>
+            <v-scroll-y-transition>
+              <div
+                class="black--text v-cursor-pointer ml-5"
+                @click="$router.push(router.to)"
+                :key="index"
+              >
+                {{ router.title }}
+              </div>
+            </v-scroll-y-transition>
+          </v-scroll-y-reverse-transition>
+        </template>
+      </no-ssr>
       <v-spacer> </v-spacer>
       <v-scroll-y-reverse-transition>
         <v-scroll-y-transition>
           <v-app-bar-nav-icon
-            v-if="$store.state.windowState.scrollY != 0"
+            v-if="
+              $store.state.windowState.scrollY != 0 || $store.state.windowState.isMobile
+            "
             :class="{
               'white--text grey': !header.isOpen,
               'black--text white': header.isOpen,
