@@ -15,7 +15,7 @@
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
 body {
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: "Noto Sans JP", system-ui;
 }
 .v-cursor-pointer {
   cursor: pointer;
@@ -30,8 +30,8 @@ body {
 </style>
 
 <script lang="ts">
-import TheHeader from "~/components/TheHeader.vue";
-import TheFooter from "~/components/TheFooter.vue";
+const TheHeader = () => import("~/components/TheHeader.vue");
+const TheFooter = () => import("~/components/TheFooter.vue");
 
 export default {
   components: {
@@ -49,31 +49,46 @@ export default {
   head(this: { $store: any }): any {
     return {
       title: this.$store.state.windowState.title as string,
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          hid: "description",
+          name: "description",
+          content: this.$store.state.windowState.description,
+        },
+      ],
     };
   },
   methods: {
     scrollHandle(this: { $store: any }): void {
-      this.$store.commit("windowState/setScrollX", window.pageXOffset);
-      this.$store.commit("windowState/setScrollY", window.pageYOffset);
+      if (process.browser) {
+        this.$store.commit("windowState/setScrollX", window.pageXOffset);
+        this.$store.commit("windowState/setScrollY", window.pageYOffset);
+      }
     },
     resizeHandle(this: { $store: any }): void {
-      if (window.innerWidth <= 1260) {
-        this.$store.commit("windowState/setIsMobile", true);
-      } else {
-        this.$store.commit("windowState/setIsMobile", false);
+      if (process.browser) {
+        if (window.innerWidth <= 1260) {
+          this.$store.commit("windowState/setIsMobile", true);
+        } else {
+          this.$store.commit("windowState/setIsMobile", false);
+        }
       }
     },
   },
   created(this: { scrollHandle: Function; resizeHandle: Function }): void {
-    window.addEventListener("scroll", () => {
+    if (process.browser) {
+      window.addEventListener("scroll", () => {
+        this.scrollHandle();
+      });
       this.scrollHandle();
-    });
-    this.scrollHandle();
 
-    window.addEventListener("resize", () => {
+      window.addEventListener("resize", () => {
+        this.resizeHandle();
+      });
       this.resizeHandle();
-    });
-    this.resizeHandle();
+    }
   },
 };
 </script>
