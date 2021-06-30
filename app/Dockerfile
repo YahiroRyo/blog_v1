@@ -12,7 +12,9 @@ create-nuxt-app \
 nuxt-typed-vuex \
 @nuxtjs/markdownit \
 markdown-it-attrs \
-markdown-it-div 
+markdown-it-div \
+markdown-it-anchor \
+markdown-it-table-of-contents
 
 RUN mkdir /home/app
 WORKDIR /home/app
