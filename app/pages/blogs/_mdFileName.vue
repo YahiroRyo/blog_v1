@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import MdFileName from "~/components/MdFileName.vue";
+const MdFileName = () => import("~/components/MdFileName.vue");
 
 export default {
   components: {

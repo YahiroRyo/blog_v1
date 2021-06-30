@@ -1,101 +1,107 @@
 <template>
   <div>
-    <v-row v-if="md" cols="15" justify="center" align-content="center">
+    <link href="/mdFileName.css" rel="stylesheet" />
+    <v-row v-if="result.isExists" cols="15" justify="center" align-content="center">
       <v-col cols="10">
         <div v-html="md"></div>
+      </v-col>
+      <v-col
+        :cols="$store.state.windowState.isMobile ? '15' : '2'"
+        :class="{ 'self-intro': !$store.state.windowState.isMobile }"
+      >
+        <v-divider class="mt-10" v-if="$store.state.windowState.isMobile"></v-divider>
+        <v-card flat>
+          <v-img class="mx-auto" max-width="250" src="/favicon.ico" alt="YAPPI BLOG" />
+          <v-card-title>ヤッピー </v-card-title>
+          <v-card-subtitle>専門学生一年生</v-card-subtitle>
+          <v-divider></v-divider>
+          <v-card-text
+            ><span class="body-1" style="color: #224047">自己紹介</span
+            ><br />知識欲のままに行動をしてたまに空回りする男<br />現在はWeb系を中心に勉強をしている</v-card-text
+          >
+          <v-card-text
+            ><span class="body-1" style="color: #224047"
+              >ある程度使える言語とかフレームワーク達</span
+            ><br />Laravel / Vue / Nuxt / Python / C#</v-card-text
+          >
+          <v-card-actions class="d-flex">
+            <v-icon
+              class="mx-auto text-h3 v-icon-hover"
+              @click="linkToOtherWindow('https://github.com/YahiroRyo')"
+              >mdi-github</v-icon
+            >
+            <v-icon
+              class="mx-auto text-h3 v-icon-hover"
+              @click="linkToOtherWindow('https://twitter.com/Yappisec')"
+              >mdi-twitter</v-icon
+            >
+          </v-card-actions>
+        </v-card>
       </v-col>
     </v-row>
     <v-overlay :value="true" v-else>
       <v-row cols="15" justify="center" align-content="center">
-        <v-col class="text-center">
+        <v-col cols="10" class="text-center">
           <v-progress-circular indeterminate size="96"></v-progress-circular>
-          <p class="display-1 mt-10">サーバを起動中か、データを取得中です。</p>
+          <p
+            class="mt-10"
+            :class="{
+              'display-1': !$store.state.windowState.isMobile,
+              'text-h6': $store.state.windowState.isMobile,
+            }"
+          >
+            サーバを起動中か、データを取得中です。
+          </p>
           <p class="body-1">
             ※30秒立っても見れない場合は、ページを抜けていただいて構いません
           </p>
         </v-col>
       </v-row>
     </v-overlay>
-    <Component is="style">
-      a { color: #4183c4; } a.absent { color: #cc0000; } a.anchor { display: block;
-      padding-left: 30px; margin-left: -30px; cursor: pointer; position: absolute; top: 0;
-      left: 0; bottom: 0; } h1, h2, h3, h4, h5, h6 { margin: 20px 0 10px; padding: 0;
-      font-weight: bold; -webkit-font-smoothing: antialiased; cursor: text; position:
-      relative; } h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover
-      a.anchor, h5:hover a.anchor, h6:hover a.anchor { text-decoration: none; } h1 tt, h1
-      code { font-size: inherit; } h2 tt, h2 code { font-size: inherit; } h3 tt, h3 code {
-      font-size: inherit; } h4 tt, h4 code { font-size: inherit; } h5 tt, h5 code {
-      font-size: inherit; } h6 tt, h6 code { font-size: inherit; } h1 { font-size: 28px;
-      border-bottom: 1px solid #cccccc; color: black; } h2 { font-size: 24px; color:
-      black; } h3 { font-size: 18px; } h4 { font-size: 16px; } h5 { font-size: 14px; } h6
-      { color: #777777; font-size: 14px; } p, blockquote, ul, ol, dl, li, table, pre {
-      margin: 15px 0; } hr { border: 0 none; color: #cccccc; height: 4px; padding: 0; }
-      a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4,
-      a:first-child h5, a:first-child h6 { margin-top: 0; padding-top: 0; } h1 p, h2 p, h3
-      p, h4 p, h5 p, h6 p { margin-top: 0; } li p.first { display: inline-block; } li {
-      margin: 0; } ul, ol { padding-left: 30px; } ul :first-child, ol :first-child {
-      margin-top: 0; } dl { padding: 0; } dl dt { font-size: 14px; font-weight: bold;
-      font-style: italic; padding: 0; margin: 15px 0 5px; } dl dt:first-child { padding:
-      0; } dl dt > :first-child { margin-top: 0; } dl dt > :last-child { margin-bottom: 0;
-      } dl dd { margin: 0 0 15px; padding: 0 15px; } dl dd > :first-child { margin-top: 0;
-      } dl dd > :last-child { margin-bottom: 0; } blockquote { border-left: 4px solid
-      #dddddd; padding: 0 15px; color: #777777; } blockquote > :first-child { margin-top:
-      0; } blockquote > :last-child { margin-bottom: 0; } table { padding: 0;
-      border-collapse: collapse; } table tr { border-top: 1px solid #cccccc;
-      background-color: white; margin: 0; padding: 0; } table tr:nth-child(2n) {
-      background-color: #f8f8f8; } table tr th { font-weight: bold; border: 1px solid
-      #cccccc; margin: 0; padding: 6px 13px; } table tr td { border: 1px solid #cccccc;
-      margin: 0; padding: 6px 13px; } table tr th :first-child, table tr td :first-child {
-      margin-top: 0; } table tr th :last-child, table tr td :last-child { margin-bottom:
-      0; } img { max-width: 100%; } span.frame { display: block; overflow: hidden; }
-      span.frame > span { border: 1px solid #dddddd; display: block; float: left;
-      overflow: hidden; margin: 13px 0 0; padding: 7px; width: auto; } span.frame span img
-      { display: block; float: left; } span.frame span span { clear: both; color: #333333;
-      display: block; padding: 5px 0 0; } span.align-center { display: block; overflow:
-      hidden; clear: both; } span.align-center > span { display: block; overflow: hidden;
-      margin: 13px auto 0; text-align: center; } span.align-center span img { margin: 0
-      auto; text-align: center; } span.align-right { display: block; overflow: hidden;
-      clear: both; } span.align-right > span { display: block; overflow: hidden; margin:
-      13px 0 0; text-align: right; } span.align-right span img { margin: 0; text-align:
-      right; } span.float-left { display: block; margin-right: 13px; overflow: hidden;
-      float: left; } span.float-left span { margin: 13px 0 0; } span.float-right {
-      display: block; margin-left: 13px; overflow: hidden; float: right; }
-      span.float-right > span { display: block; overflow: hidden; margin: 13px auto 0;
-      text-align: right; } code, tt { margin: 0 2px; padding: 0 5px; white-space: nowrap;
-      border: 1px solid #eaeaea; background-color: #f8f8f8; border-radius: 3px; } pre code
-      { margin: 0; padding: 0; white-space: pre; border: none; background: transparent; }
-      .highlight pre { background-color: #f8f8f8; border: 1px solid #cccccc; font-size:
-      13px; line-height: 19px; overflow: auto; padding: 6px 10px; border-radius: 3px; }
-      pre { background-color: #f8f8f8; border: 1px solid #cccccc; font-size: 13px;
-      line-height: 19px; overflow: auto; padding: 6px 10px; border-radius: 3px; } pre
-      code, pre tt { background-color: transparent; border: none; } sup { font-size:
-      0.83em; vertical-align: super; line-height: 0; } * { -webkit-print-color-adjust:
-      exact; } @media print { table, pre { page-break-inside: avoid; } pre { word-wrap:
-      break-word; } }
-    </Component>
   </div>
 </template>
 
+<style lang="scss" scoped>
+.v-icon-hover {
+  padding: 10px;
+  border-radius: 50%;
+}
+.v-icon-hover:hover {
+  background-color: #eee;
+}
+.self-intro {
+  position: sticky;
+  top: 0;
+  height: 100px;
+}
+</style>
+
 <script lang="ts">
 import { $axios } from "~/utils/api";
+import { Store } from "vuex";
 
 export default {
   props: { genre: { type: String }, routeFileId: { type: String } },
-  data(this: { $route: any }, props: { genre: string; routeFileId: string }): any {
+  data(props: { genre: string; routeFileId: string }): any {
     return {
-      result: null as any,
       md: "" as string,
       mode: props.genre as string,
+      result: {} as any,
       fileId: props.routeFileId as string,
     } as any;
   },
+  methods: {
+    linkToOtherWindow(url: string) {
+      window.open(url, "_blank");
+    },
+  },
   async created(this: {
-    result: any;
     md: string;
     mode: string;
+    result: any;
     fileId: string;
     $md: { render: Function };
-    $store: any;
+    $store: Store<any>;
   }): Promise<void> {
     // ここでmdファイルをfetch
     const param = {
@@ -104,8 +110,12 @@ export default {
       } as any,
     };
     this.result = await $axios.$get(`/${this.mode}/get`, param);
-    this.md = this.$md.render(this.result.md);
+    this.md = this.$md.render("[[toc]]\n" + this.result.md);
     this.$store.commit("windowState/setTitle", this.result.title);
+
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = this.md;
+    this.$store.commit("windowState/setDescription", tempDiv.innerText);
   },
 };
 </script>
