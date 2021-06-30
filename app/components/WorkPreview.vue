@@ -2,8 +2,8 @@
   <div>
     <v-row class="v-cursor-pointer" align-content="center" justify="center">
       <v-card
-        width="500"
-        height="300"
+        :width="$store.state.windowState.isMobile ? '300' : '500'"
+        :height="$store.state.windowState.isMobile ? '169' : '281'"
         @mouseover="isHover = true"
         @mouseleave="isHover = false"
         @click="$router.push(to)"
