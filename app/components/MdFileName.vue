@@ -112,10 +112,12 @@ export default {
     this.result = await $axios.$get(`/${this.mode}/get`, param);
     this.md = this.$md.render("[[toc]]\n" + this.result.md);
     this.$store.commit("windowState/setTitle", this.result.title);
-
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = this.md;
-    this.$store.commit("windowState/setDescription", tempDiv.innerText);
+    if (process.browser) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = this.md;
+      this.$store.commit("windowState/setDescription", tempDiv.innerText);
+    }
+    this.$store.commit("windowState/setImg", this.result.img);
   },
 };
 </script>
