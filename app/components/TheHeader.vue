@@ -7,7 +7,7 @@
         @click="$router.push('/')"
         >YAPPI BLOG</v-toolbar-title
       >
-      <no-ssr>
+      <client-only>
         <template
           v-for="(router, index) in routers"
           v-if="
@@ -28,7 +28,7 @@
             </v-scroll-y-transition>
           </v-scroll-y-reverse-transition>
         </template>
-      </no-ssr>
+      </client-only>
       <v-spacer> </v-spacer>
       <v-scroll-y-reverse-transition>
         <v-scroll-y-transition>
