@@ -15,12 +15,22 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: '' },
+      {
+        property: "og:url",
+        content: "https://stupefied-ramanujan-ce7604.netlify.app/",
+      },
+      { property: "og:site_name", content: "YAPPI BLOG" },
+      { property: "og:type", content: "website|article" },
+      { name: "twitter:card", content: "summary|summary_large_image" },
+      { name: "twitter:site", content: "@Yappisec" },
+      { name: "twitter:creator", content: "@Yappisec" },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  serverMiddleware: ["~/middleware/response-header.ts"],
   router: {
     middleware: "titleMiddleware",
     extendRoutes (routes, resolve) {
@@ -67,7 +77,7 @@ export default {
     typography: true,
     breaks: true,
     use: ['markdown-it-div', 'markdown-it-attrs', 'markdown-it-anchor', ['markdown-it-table-of-contents', {
-      includeLevel: [1, 2],
+      includeLevel: [1, 2, 3],
       listType: 'ol',
       containerClass: 'table-of-contents',
     }]],

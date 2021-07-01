@@ -4,6 +4,7 @@ export const state = () => ({
     isMobile: false as boolean,
     title: '' as string,
     description: '' as string,
+    img: '' as string,
 });
 
 export const mutations = {
@@ -21,5 +22,8 @@ export const mutations = {
   },
   setDescription(state: { description: string; }, description: string): void {
     state.description = description;
+  },
+  setImg(state: { img: string; }, img: string): void {
+    state.img = img;
   }
 };

@@ -50,13 +50,17 @@ export default {
     return {
       title: this.$store.state.windowState.title as string,
       meta: [
-        { charset: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           hid: "description",
           name: "description",
           content: this.$store.state.windowState.description,
         },
+        { property: "og:title", content: this.$store.state.windowState.title },
+        {
+          property: "og:description",
+          content: this.$store.state.windowState.description,
+        },
+        { property: "og:image", content: this.$store.state.windowState.img },
       ],
     };
   },

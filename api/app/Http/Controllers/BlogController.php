@@ -114,11 +114,11 @@ class BlogController extends Controller
                 $fileId,
                 ['alt' => 'media'],
             );
-            $title = Blog::where('file_id', $fileId)
-                        ->first()['title'];
-            return json_encode(['isExists' => true, 'title' => $title, 'md' => $response->getBody()->getContents()]);
+            $blog = Blog::where('file_id', $fileId)
+                        ->first();
+            return json_encode(['isExists' => true, 'title' => $blog['title'], 'img' => $blog['img'], 'md' => $response->getBody()->getContents()]);
         } else {
-            return json_encode(['isExists' => false, 'title' => '','md' => '']);
+            return json_encode(['isExists' => false, 'title' => '', 'img' => '','md' => '']);
         }
     }
 

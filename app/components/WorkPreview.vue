@@ -9,9 +9,20 @@
         @click="$router.push(to)"
         :style="'background-image: url(' + img + '); background-size: cover'"
       >
-        <v-overlay absolute :value="isHover" class="text-h4">
-          {{ title }}
-        </v-overlay>
+        <v-row cols="15" align-content="center" justify="center">
+          <v-overlay
+            absolute
+            :value="isHover"
+            :class="{
+              'text-h4': !$store.state.windowState.isMobile,
+              'text-h6': $store.state.windowState.isMobile,
+            }"
+          >
+            <v-col cols="12">
+              {{ title }}
+            </v-col>
+          </v-overlay>
+        </v-row>
       </v-card>
     </v-row>
   </div>
