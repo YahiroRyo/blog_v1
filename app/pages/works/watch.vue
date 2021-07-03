@@ -1,5 +1,5 @@
 <template>
-  <MdFileName genre="blog" :route-file-id="$route.params.mdFileName" />
+  <MdFileName genre="work" :route-file-id="$route.query.fi" />
 </template>
 
 <script lang="ts">
