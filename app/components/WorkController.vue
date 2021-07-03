@@ -1,5 +1,5 @@
 <template>
-  <v-row cols="15" justify="center" align-content="center" style="height: 80vh">
+  <v-row justify="center" align-content="center" style="height: 80vh">
     <v-col cols="10">
       <template v-if="pageState == CREATE_STATE.INPUT">
         <v-text-field
