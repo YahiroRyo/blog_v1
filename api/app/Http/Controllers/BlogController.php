@@ -38,7 +38,8 @@ class BlogController extends Controller
         $num = intval($request->num);
         $sum = intval($request->sum);
         
-        $blogs = Blog::select(['file_id','title', 'img'])
+        $blogs = Blog::select(['id', 'file_id','title', 'img'])
+            ->orderBy('id', 'desc')
             ->take($sum + $num)
             ->get();
         for ($i = $sum; $i < (count($blogs) < $sum + $num ? count($blogs) : $sum + $num); $i++) {

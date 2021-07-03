@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- headerのbar -->
-    <v-app-bar flat app color="white">
-      <v-toolbar-title
-        class="font-weight-bold text-h4 v-cursor-pointer grey--text text--darken-1"
-        @click="$router.push('/')"
-        >YAPPI BLOG</v-toolbar-title
-      >
-      <client-only>
+    <client-only>
+      <!-- headerのbar -->
+      <v-app-bar flat app color="white">
+        <v-toolbar-title
+          class="font-weight-bold text-h4 v-cursor-pointer grey--text text--darken-1"
+          @click="$router.push('/')"
+          >YAPPI BLOG</v-toolbar-title
+        >
         <template
           v-for="(router, index) in routers"
           v-if="
@@ -28,23 +28,23 @@
             </v-scroll-y-transition>
           </v-scroll-y-reverse-transition>
         </template>
-      </client-only>
-      <v-spacer> </v-spacer>
-      <v-scroll-y-reverse-transition>
-        <v-scroll-y-transition>
-          <v-app-bar-nav-icon
-            v-if="
-              $store.state.windowState.scrollY != 0 || $store.state.windowState.isMobile
-            "
-            :class="{
-              'white--text grey': !header.isOpen,
-              'black--text white': header.isOpen,
-            }"
-            @click="header.isOpen = !header.isOpen"
-          ></v-app-bar-nav-icon>
-        </v-scroll-y-transition>
-      </v-scroll-y-reverse-transition>
-    </v-app-bar>
+        <v-spacer> </v-spacer>
+        <v-scroll-y-reverse-transition>
+          <v-scroll-y-transition>
+            <v-app-bar-nav-icon
+              v-show="
+                $store.state.windowState.scrollY != 0 || $store.state.windowState.isMobile
+              "
+              :class="{
+                'white--text grey': !header.isOpen,
+                'black--text white': header.isOpen,
+              }"
+              @click="header.isOpen = !header.isOpen"
+            ></v-app-bar-nav-icon>
+          </v-scroll-y-transition>
+        </v-scroll-y-reverse-transition>
+      </v-app-bar>
+    </client-only>
     <!-- 右のdrawer -->
     <v-navigation-drawer
       v-model="header.isOpen"
@@ -77,6 +77,8 @@
 </template>
 
 <script lang="ts">
+import { Store } from "vuex";
+
 export default {
   data(this: { $ROUTERS: Array<any> }): any {
     return {
@@ -86,6 +88,11 @@ export default {
       },
       routers: this.$ROUTERS as Array<any>,
     };
+  },
+  mounted(this: { header: any }): void {
+    setTimeout(() => {
+      this.header.isOpen = false;
+    }, 100);
   },
 };
 </script>

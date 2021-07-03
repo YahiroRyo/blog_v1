@@ -30,7 +30,7 @@ body {
 </style>
 
 <script lang="ts">
-const TheHeader = () => import("~/components/TheHeader.vue");
+import TheHeader from "~/components/TheHeader.vue";
 const TheFooter = () => import("~/components/TheFooter.vue");
 
 export default {
@@ -46,22 +46,9 @@ export default {
       routers: this.$ROUTERS as Array<any>,
     };
   },
-  head(this: { $store: any }): any {
+  head(this: { $store: any; $route: any }): any {
     return {
       title: this.$store.state.windowState.title as string,
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: this.$store.state.windowState.description,
-        },
-        { property: "og:title", content: this.$store.state.windowState.title },
-        {
-          property: "og:description",
-          content: this.$store.state.windowState.description,
-        },
-        { property: "og:image", content: this.$store.state.windowState.img },
-      ],
     };
   },
   methods: {

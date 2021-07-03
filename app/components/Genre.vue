@@ -1,13 +1,22 @@
 <template>
   <div class="mt-10">
-    <v-row cols="15" v-if="result.length != 0" justify="center" align-content="center">
-      <v-col v-for="(item, index) in result" :key="index" class="mb-10 mx-5">
+    <v-row v-if="result.length != 0" justify="center" align-content="center">
+      <v-col
+        xl="2"
+        lg="3"
+        md="4"
+        sm="5"
+        xs="10"
+        v-for="(item, index) in result"
+        :key="index"
+        class="mb-10 mx-5"
+      >
         <WorkPreview
           :title="item.title"
           :img="item.img"
-          :to="`/${mode}/${item.fileId}`"
+          :genre="genre"
+          :to="`/${mode}/watch?fi=${item.fileId}`"
         />
-        <p class="mt-10 text-center text-h6">{{ item.title }}</p>
       </v-col>
     </v-row>
     <v-row v-else justify="center" align-content="center" style="height: 300px">
