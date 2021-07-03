@@ -12,17 +12,14 @@ export default {
     htmlAttrs: {
       lang: 'en'
     },
+    script: [
+    ],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      {
-        property: "og:url",
-        content: "https://stupefied-ramanujan-ce7604.netlify.app/",
-      },
       { property: "og:site_name", content: "YAPPI BLOG" },
       { property: "og:type", content: "website|article" },
-      { name: "twitter:card", content: "summary|summary_large_image" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Yappisec" },
       { name: "twitter:creator", content: "@Yappisec" },
     ],
@@ -38,7 +35,10 @@ export default {
         name: 'custom',
         path: '*',
         component: resolve(__dirname, 'pages/errors/404.vue')
-      })
+      });
+      for (const key in routes) {
+        routes[key].caseSensitive = true;
+      }
     }
   },
   generate: {
@@ -69,6 +69,12 @@ export default {
   modules: [
     '@nuxtjs/markdownit',
     '@nuxtjs/axios',
+    // ['@nuxtjs/google-adsense', {
+    //   id: 'ca-pub-3291128098360922',
+    //   pageLevelAds: true,
+    //   analyticsUacct: 'UA-XXX-X',
+    //   analyticsDomainName: 'https://stupefied-ramanujan-ce7604.netlify.app'
+    // }]
   ],
   markdownit: {
     preset: 'default',
