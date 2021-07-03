@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <Title title="作品一覧" />
-    <Genre genre="works" num="10" />
+    <Genre genre="works" num="-1" />
   </div>
 </template>
 <script lang="ts">

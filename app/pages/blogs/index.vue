@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <Title title="ブログ一覧" />
-    <Genre genre="blogs" num="10" />
+    <Genre genre="blogs" num="-1" />
   </div>
 </template>
 <script lang="ts">
