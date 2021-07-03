@@ -3,13 +3,31 @@
     <v-row class="v-cursor-pointer" align-content="center" justify="center">
       <v-card
         :width="$store.state.windowState.isMobile ? '300' : '500'"
-        :height="$store.state.windowState.isMobile ? '169' : '281'"
+        height="550"
         @mouseover="isHover = true"
         @mouseleave="isHover = false"
         @click="$router.push(to)"
-        :style="'background-image: url(' + img + '); background-size: cover'"
       >
-        <v-row cols="15" align-content="center" justify="center">
+        <v-img
+          :src="img"
+          :width="$store.state.windowState.isMobile ? '300' : '600'"
+          :height="$store.state.windowState.isMobile ? '169' : '200'"
+        >
+        </v-img>
+        <v-card-text
+          class="body-1 font-weight-bold"
+          :class="{ 'orange--text': genre == 'blogs', 'green--text': genre == 'works' }"
+          >{{ genre }}</v-card-text
+        >
+        <v-card-title>{{ title }}</v-card-title>
+        <v-row justify="center" align-content="center">
+          <v-col cols="11">
+            <v-divider></v-divider>
+            <v-card-title>筆者</v-card-title>
+            <v-card-subtitle>ヤッピー</v-card-subtitle>
+          </v-col>
+        </v-row>
+        <v-row align-content="center" justify="center">
           <v-overlay
             absolute
             :value="isHover"
@@ -30,7 +48,7 @@
 
 <script lang="ts">
 export default {
-  props: ["img", "title", "to"],
+  props: ["img", "title", "genre", "to"],
   data(): any {
     return {
       isHover: false as boolean,
