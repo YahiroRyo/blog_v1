@@ -39,6 +39,7 @@ class WorkController extends Controller
         $sum = intval($request->sum);
         
         $works = Work::select(['file_id','title', 'img'])
+            ->orderBy('id', 'desc')
             ->take($sum + $num)
             ->get();
         for ($i = $sum; $i < (count($works) < $sum + $num ? count($works) : $sum + $num); $i++) {
