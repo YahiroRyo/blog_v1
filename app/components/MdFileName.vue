@@ -1,12 +1,12 @@
 <template>
   <div>
     <link href="/mdFileName.css" rel="stylesheet" />
-    <v-row v-if="result.isExists" cols="15" justify="center" align-content="center">
-      <v-col cols="10">
+    <v-row v-if="result.isExists" justify="center" align-content="center">
+      <v-col :cols="$store.state.windowState.isMobile ? '12' : '10'">
         <div v-html="md"></div>
       </v-col>
       <v-col
-        :cols="$store.state.windowState.isMobile ? '15' : '2'"
+        :cols="$store.state.windowState.isMobile ? '12' : '2'"
         :class="{ 'self-intro': !$store.state.windowState.isMobile }"
       >
         <v-divider class="mt-10" v-if="$store.state.windowState.isMobile"></v-divider>
@@ -87,12 +87,29 @@ export default {
       md: "" as string,
       mode: props.genre as string,
       result: {} as any,
+      share: {
+        title: "",
+        url: "",
+        description: "",
+        img: "",
+      } as any,
       fileId: props.routeFileId as string,
     } as any;
   },
   methods: {
-    linkToOtherWindow(url: string) {
+    linkToOtherWindow(url: string): void {
       window.open(url, "_blank");
+    },
+    shareUrl(this: { share: any }): void {
+      navigator.clipboard
+        .writeText(
+          encodeURI(
+            `https://stupefied-ramanujan-ce7604.netlify.app/share?description=${this.share.description}&title=${this.share.title}&img=${this.share.img}&url=${this.share.url}`
+          )
+        )
+        .catch((e) => {
+          console.error(e);
+        });
     },
   },
   async created(this: {
@@ -100,7 +117,9 @@ export default {
     mode: string;
     result: any;
     fileId: string;
+    share: any;
     $md: { render: Function };
+    $route: any;
     $store: Store<any>;
   }): Promise<void> {
     // ここでmdファイルをfetch
@@ -112,12 +131,23 @@ export default {
     this.result = await $axios.$get(`/${this.mode}/get`, param);
     this.md = this.$md.render("[[toc]]\n" + this.result.md);
     this.$store.commit("windowState/setTitle", this.result.title);
+    this.share.title = this.result.title;
     if (process.browser) {
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = this.md;
-      this.$store.commit("windowState/setDescription", tempDiv.innerText);
+      this.$store.commit(
+        "windowState/setDescription",
+        tempDiv.innerText.replaceAll("\n", "")
+      );
+      this.share.description = tempDiv.innerText.substr(0, 99).replaceAll("\n", "");
     }
     this.$store.commit("windowState/setImg", this.result.img);
+
+    this.share.img = String(this.result.img).replace("https://res.cloudinary.com", "");
+    this.share.url = String(this.$route.fullPath).replace(
+      "https://stupefied-ramanujan-ce7604.netlify.app",
+      ""
+    );
   },
 };
 </script>
