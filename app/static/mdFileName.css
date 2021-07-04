@@ -1,5 +1,5 @@
 a:not(.table-of-contents *)::before {
-  content: '▶ ';
+  content: '→ ';
 }
 a:not(.table-of-contents *) {
   background-color: white;
