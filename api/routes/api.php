@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\WorkController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -25,6 +26,8 @@ Route::get('/works/get', [WorkController::class, 'index']);
 Route::get('/work/get', [WorkController::class, 'show']);
 Route::post('/work/create', [WorkController::class, 'create']);
 Route::post('/work/delete', [WorkController::class, 'delete']);
+
+Route::get('/tag/contents/get', [TagController::class, 'index']);
 
 Route::get('/is-auth', [AuthController::class, 'is_auth']);
 Route::post('/auth', [AuthController::class, 'auth']);

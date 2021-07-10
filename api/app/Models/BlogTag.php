@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Blog;
 
 class BlogTag extends Model
 {
@@ -11,4 +12,7 @@ class BlogTag extends Model
         'blog_id',
         'tag',
     ];
+    public function blog() {
+        return $this->hasOne(Blog::class, 'id', 'blog_id');
+    }
 }
