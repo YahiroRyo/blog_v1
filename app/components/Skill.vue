@@ -4,7 +4,6 @@
       ><v-icon class="mr-2">mdi-{{ icon }}</v-icon
       >{{ lang }}</v-card-title
     >
-    <!-- <v-card-text>・なぜ勉強しようと考えたか<br />{{ explain }}</v-card-text> -->
   </v-card>
 </template>
 
