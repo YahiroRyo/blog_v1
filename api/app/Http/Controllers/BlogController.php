@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Blog;
+use App\Models\BlogTag;
 use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
@@ -41,14 +42,23 @@ class BlogController extends Controller
         $blogs = Blog::select(['id', 'file_id','title', 'img'])
             ->orderBy('id', 'desc')
             ->take($sum + $num)
-            ->get();
+            ->with('blog_tag')
+            ->get()
+            ->toArray();
         for ($i = $sum; $i < (count($blogs) < $sum + $num ? count($blogs) : $sum + $num); $i++) {
             array_push($result, [
                 'fileId' => $blogs[$i]['file_id'],
+                'tags' => array_map(
+                    function($tag){
+                        unset($tag['blog_id']);
+                        return $tag['tag'];
+                    }, $blogs[$i]['blog_tag']
+                ),
                 'title' => $blogs[$i]['title'],
                 'img' => $blogs[$i]['img'],
             ]);
         }
+
         return $result;
     }
 
@@ -63,9 +73,11 @@ class BlogController extends Controller
         // $request->img    画像URL
         // $request->md     マークダウン
         $title = $request->title;
+        $tags = $request->tags;
         $img = $request->img;
         $md = $request->md;
 
+        DB::beginTransaction();
         $file = $this->googleDrive->files->create(
             new \Google_Service_Drive_DriveFile([
                 'name' => $title.'.md',
@@ -79,14 +91,26 @@ class BlogController extends Controller
                 'supportsAllDrives' => true,
             ]
         );
-        
-        $blog = new Blog();
-        $blog->fill([
-            'img' => $img,
-            'title' => $title,
-            'file_id' => $file->id,
-        ]);
-        $blog->save();
+        try {
+            $blog = new Blog();
+            $blog->fill([
+                'img' => $img,
+                'title' => $title,
+                'file_id' => $file->id,
+            ]);
+            $blog->save();
+            foreach($tags as &$tag) {
+                $blogTag = new BlogTag();
+                $blogTag->fill([
+                    'blog_id' => $blog->id,
+                    'tag' => $tag,
+                ]);
+                $blogTag->save();
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+        }
+        DB::commit();
     }
 
     /**

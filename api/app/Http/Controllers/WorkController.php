@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Work;
+use App\Models\WorkTag;
 use Illuminate\Support\Facades\DB;
 
 class WorkController extends Controller
@@ -38,14 +39,22 @@ class WorkController extends Controller
         $num = intval($request->num);
         $sum = intval($request->sum);
         
-        $works = Work::select(['file_id','title', 'img'])
+        $works = Work::select(['id', 'file_id','title', 'img'])
             ->orderBy('id', 'desc')
             ->take($sum + $num)
-            ->get();
+            ->with('work_tag')
+            ->get()
+            ->toArray();
         for ($i = $sum; $i < (count($works) < $sum + $num ? count($works) : $sum + $num); $i++) {
             array_push($result, [
                 'fileId' => $works[$i]['file_id'],
                 'title' => $works[$i]['title'],
+                'tags' => array_map(
+                    function($tag){
+                        unset($tag['work_id']);
+                        return $tag['tag'];
+                    }, $works[$i]['work_tag']
+                ),
                 'img' => $works[$i]['img'],
             ]);
         }
@@ -63,10 +72,11 @@ class WorkController extends Controller
         // $request->img    画像URL
         // $request->md     マークダウン
         $title = $request->title;
+        $tags = $request->tags;
         $img = $request->img;
         $md = $request->md;
 
-
+        DB::beginTransaction();
         $file = $this->googleDrive->files->create(
             new \Google_Service_Drive_DriveFile([
                 'name' => $title.'.md',
@@ -80,14 +90,26 @@ class WorkController extends Controller
                 'supportsAllDrives' => true,
             ]
         );
-        
-        $work = new Work();
-        $work->fill([
-            'img' => $img,
-            'title' => $title,
-            'file_id' => $file->id,
-        ]);
-        $work->save();
+        try {
+            $work = new Work();
+            $work->fill([
+                'img' => $img,
+                'title' => $title,
+                'file_id' => $file->id,
+            ]);
+            $work->save();
+            foreach($tags as &$tag) {
+                $workTag = new WorkTag();
+                $workTag->fill([
+                    'work_id' => $work->id,
+                    'tag' => $tag,
+                ]);
+                $workTag->save();
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+        }
+        DB::commit();
     }
 
     /**
