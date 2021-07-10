@@ -12,7 +12,7 @@
           v-for="(router, index) in routers"
           v-if="
             $store.state.windowState.scrollY == 0 &&
-            !$store.state.windowState.isMobile &&
+            !$vuetify.breakpoint.mobile &&
             !router.isHide
           "
         >
@@ -32,9 +32,7 @@
         <v-scroll-y-reverse-transition>
           <v-scroll-y-transition>
             <v-app-bar-nav-icon
-              v-show="
-                $store.state.windowState.scrollY != 0 || $store.state.windowState.isMobile
-              "
+              v-show="$store.state.windowState.scrollY != 0 || $vuetify.breakpoint.mobile"
               :class="{
                 'white--text grey': !header.isOpen,
                 'black--text white': header.isOpen,
