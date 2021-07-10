@@ -14,17 +14,37 @@
         <WorkPreview
           :title="item.title"
           :img="item.img"
+          :tags="item.tags"
           :genre="genre"
           :to="`/${mode}/watch?fi=${item.fileId}`"
         />
       </v-col>
     </v-row>
-    <v-row v-else justify="center" align-content="center" style="height: 300px">
-      <v-progress-circular
-        size="64"
-        indeterminate
-        color="gray darken-1"
-      ></v-progress-circular>
+    <v-row v-else justify="center" align-content="center">
+      <v-col
+        xl="2"
+        lg="3"
+        md="4"
+        sm="5"
+        xs="10"
+        v-for="n in 3"
+        :key="n"
+        class="mb-10 mx-5"
+      >
+        <v-row align-content="center" justify="center">
+          <v-sheet
+            :width="$vuetify.breakpoint.mobile ? '400' : '600'"
+            height="550"
+            color="grey lighten-5"
+          >
+            <v-skeleton-loader
+              class="pa-2"
+              type="image, table-cell, text, divider, table-cell, text"
+            >
+            </v-skeleton-loader>
+          </v-sheet>
+        </v-row>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -54,17 +74,19 @@ export default {
   }): Promise<void> {
     // Blogをnum分fetch
     // numが-1だったら50個ずつfetch
-    const param = {
-      params: {
-        num: this.fetchNum as Number,
-        sum: 0 as Number,
-      } as any,
-    } as any;
-    if (this.fetchNum == -1) {
-      // 50個fetch
-      param.params.num = 50;
+    if (process.client) {
+      const param = {
+        params: {
+          num: this.fetchNum as Number,
+          sum: 0 as Number,
+        } as any,
+      } as any;
+      if (this.fetchNum == -1) {
+        // 50個fetch
+        param.params.num = 50;
+      }
+      this.result = await $axios.$get(`/${this.mode}/get`, param);
     }
-    this.result = await $axios.$get(`/${this.mode}/get`, param);
   },
 };
 </script>
