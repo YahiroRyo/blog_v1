@@ -1,6 +1,9 @@
 <template>
   <v-row justify="center" align-content="center" style="height: 80vh">
     <v-col cols="10">
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!--    認証    -->
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <template v-if="pageState == CREATE_STATE.INPUT">
         <v-text-field
           v-model="authPass"
@@ -8,6 +11,9 @@
         ></v-text-field>
         <v-btn outlined large @click="auth()" color="indigo">認証</v-btn>
       </template>
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!--    ロード    -->
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <template v-else-if="pageState == CREATE_STATE.LOADING">
         <div class="text-center">
           <v-progress-circular
@@ -18,7 +24,13 @@
           <div class="display-1 mt-10">ロード中</div>
         </div>
       </template>
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!--    認証後    -->
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <template v-else-if="pageState == CREATE_STATE.SUCCESS">
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <!--    削除モード    -->
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <v-row v-if="modeState == MODE.DELETE">
           <v-dialog :value="true" transition="dialog-bottom-transition" max-width="600">
             <v-card>
@@ -33,6 +45,9 @@
             </v-card>
           </v-dialog>
         </v-row>
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <!--    作成モード    -->
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <template v-else>
           <div class="d-flex">
             <v-text-field
@@ -42,7 +57,22 @@
             ></v-text-field>
             <v-text-field class="ml-5" v-model="form.img" label="イメージ"></v-text-field>
           </div>
-          <v-row cols="15" justify="center" align-content="center">
+          <v-text-field
+            @keyup.enter="addTag()"
+            v-model="form.tag.tmp"
+            label="タグ"
+          ></v-text-field>
+          <v-chip
+            color="red"
+            v-for="(item, index) in form.tag.objects"
+            :key="index"
+            class="mr-2 white--text"
+            draggable
+          >
+            <v-icon @click="deleteTag(index)" class="mr-1">mdi-close</v-icon>
+            {{ item }}
+          </v-chip>
+          <v-row class="mt-2" justify="center" align-content="center">
             <v-col cols="6">
               <v-textarea
                 v-model="form.md"
@@ -76,6 +106,9 @@
           >
         </template>
       </template>
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!--    エラーだった場合    -->
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <v-dialog
         :value="pageState == CREATE_STATE.ERROR"
         transition="dialog-bottom-transition"
@@ -94,6 +127,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+      <!--    作成した場合のダイアログ    -->
+      <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <template v-if="isCreated">
         <v-snackbar v-if="modeState == MODE.CREATE" v-model="isCreated">
           {{ attribute == "blog" ? "ブログ" : "作品" }}を作成しました。
@@ -175,6 +211,10 @@ export default {
         title: "" as string,
         img: "" as string,
         md: "" as string,
+        tag: {
+          objects: [] as Array<string>,
+          tmp: "" as string,
+        },
       } as any,
     } as any;
   },
@@ -184,10 +224,22 @@ export default {
       pageState: CREATE_STATE;
       errorState: ERROR_CODE;
     }): void {
-      this.pageState = CREATE_STATE.INPUT;
+      if (this.errorState == ERROR_CODE.CREATE) {
+        this.pageState = CREATE_STATE.SUCCESS;
+      } else {
+        this.pageState = CREATE_STATE.INPUT;
+      }
       this.errorState = ERROR_CODE.NONE;
     },
-
+    // タグを追加
+    addTag(this: { form: { tag: { objects: Array<string>; tmp: string } } }): void {
+      this.form.tag.objects.push(this.form.tag.tmp);
+      this.form.tag.tmp = "";
+    },
+    // タグを削除
+    deleteTag(this: { form: { tag: { objects: Array<string> } } }, index: number): void {
+      this.form.tag.objects.splice(index, 1);
+    },
     // 作成
     async create(this: {
       pageState: CREATE_STATE;
@@ -195,6 +247,7 @@ export default {
       attribute: string;
       form: {
         title: string;
+        tag: { objects: Array<string> };
         img: string;
         md: string;
       };
@@ -204,6 +257,7 @@ export default {
       this.pageState = CREATE_STATE.LOADING;
       const param = {
         title: this.form.title,
+        tags: this.form.tag.objects,
         img: this.form.img,
         md: this.form.md,
       };
