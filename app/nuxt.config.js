@@ -2,26 +2,26 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: true,
+  mode: 'universal',
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s | YAPPI BLOG',
-    title: 'app',
+    title: 'YAPPI BLOG',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ja'
     },
     script: [
     ],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { property: "og:site_name", content: "YAPPI BLOG" },
-      { property: "og:type", content: "website|article" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Yappisec" },
-      { name: "twitter:creator", content: "@Yappisec" },
+      { hid: 'og:site_name', property: "og:site_name", content: "YAPPI BLOG" },
+      { hid: 'og:type', property: "og:type", content: "website|article" },
+      { hid: 'twitter:card', name: "twitter:card", content: "summary_large_image" },
+      { hid: 'twitter:site', name: "twitter:site", content: "@Yappisec" },
+      { hid: 'twitter:creator', name: "twitter:creator", content: "@Yappisec" },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -109,6 +109,16 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend(config, { isDev, isClient }) {
+      if (isClient) {
+        config.node = {
+          fs: 'empty',
+          child_process: 'empty',
+          tls: 'empty',
+          net: 'empty'
+        }
+      }
+    }
   },
   axios: {
     proxy: true,
