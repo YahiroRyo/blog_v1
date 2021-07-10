@@ -4,8 +4,8 @@
       <h1
         class="font-weight-thin main-img__title"
         :class="{
-          'text-h2': !$store.state.windowState.isMobile,
-          'text-h3': $store.state.windowState.isMobile,
+          'text-h2': !$vuetify.breakpoint.mobile,
+          'text-h3': $vuetify.breakpoint.mobile,
         }"
       >
         知識欲のままに学習を続ける.
@@ -32,11 +32,37 @@ export default {
     Genre,
     Title,
   },
-  created(this: { $store: Store<any> }): void {
-    this.$store.commit(
-      "windowState/setDescription",
-      "YAPPIブログ | ホーム エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます"
-    );
+  head(this: { meta: any }): any {
+    if (process.server) {
+      return {
+        title: "YAPPIブログ | ホーム",
+        meta: [
+          {
+            hid: "description",
+            name: "description",
+            content:
+              "YAPPIブログ | ホーム エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます",
+          },
+          {
+            hid: "og:description",
+            property: "og:description",
+            content:
+              "YAPPIブログ | ホーム エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます",
+          },
+          { hid: "og:title", property: "og:title", content: "ホーム" },
+          {
+            hid: "og:image",
+            property: "og:image",
+            content: "https://yappi-blog.herokuapp.com/favicon.png",
+          },
+          {
+            hid: "og:url",
+            property: "og:url",
+            content: "https://yappi-blog.herokuapp.com",
+          },
+        ],
+      };
+    }
   },
 };
 </script>

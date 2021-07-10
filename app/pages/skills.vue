@@ -85,11 +85,37 @@ export default {
       ],
     } as any;
   },
-  created(this: { $store: Store<any> }): void {
-    this.$store.commit(
-      "windowState/setDescription",
-      "YAPPIブログ | スキル一覧 エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます"
-    );
+  head(this: { meta: any }): any {
+    if (process.server) {
+      return {
+        title: "YAPPIブログ | スキル一覧",
+        meta: [
+          {
+            hid: "description",
+            name: "description",
+            content:
+              "YAPPIブログ | スキル一覧 エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます",
+          },
+          {
+            hid: "og:description",
+            property: "og:description",
+            content:
+              "YAPPIブログ | スキル一覧 エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます",
+          },
+          { hid: "og:title", property: "og:title", content: "スキル一覧" },
+          {
+            hid: "og:image",
+            property: "og:image",
+            content: "https://yappi-blog.herokuapp.com/favicon.png",
+          },
+          {
+            hid: "og:url",
+            property: "og:url",
+            content: "https://yappi-blog.herokuapp.com",
+          },
+        ],
+      };
+    }
   },
 };
 </script>
