@@ -69,6 +69,7 @@ class WorkController extends Controller
     public function create(Request $request)
     {
         // $request->title  タイトル
+        // $request->tags   タグ
         // $request->img    画像URL
         // $request->md     マークダウン
         $title = $request->title;
@@ -139,10 +140,22 @@ class WorkController extends Controller
                 ['alt' => 'media'],
             );
             $work = Work::where('file_id', $fileId)
-                        ->first();
-            return json_encode(['isExists' => true, 'title' => $work['title'], 'img' => $work['img'], 'md' => $response->getBody()->getContents()]);
+                        ->with('work_tag')
+                        ->first()
+                        ->toArray();
+            return json_encode([
+                'isExists' => true,
+                'title' => $work['title'],
+                'img' => $work['img'],
+                'md' => $response->getBody()->getContents(),
+                'tags' => array_map(
+                    function($tag) {
+                        unset($tag['work_id']);
+                        return $tag['tag'];
+                    }, $work['work_tag'])
+                ]);
         } else {
-            return json_encode(['isExists' => false, 'md' => '']);
+            return json_encode(['isExists' => false, 'title' => '', 'img' => '','md' => '', 'tags' => []]);
         }
     }
 
@@ -152,9 +165,53 @@ class WorkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        // $request->fileId ファイルID
+        // $request->title  タイトル
+        // $request->tags   タグ
+        // $request->img    画像URL
+        // $request->md     マークダウン
+        $fileId = $request->fileId;
+        $title = $request->title;
+        $tags = $request->tags;
+        $img = $request->img;
+        $md = $request->md;
+        DB::beginTransaction();
+        try {
+            $file = $this->googleDrive->files->get($fileId);
+            $this->googleDrive->files->update($fileId, new \Google_Service_Drive_DriveFile, [
+                'data' => $md,
+                'mimeType' => 'text/markdown',
+                'uploadType' => 'multipart',
+            ]);
+
+            $work = Work::where('file_id', $request->fileId)
+                ->first();
+            $work->fill([
+                'title' => $title,
+                'img' => $img,
+                'md' => $md,
+            ]);
+            $work->save();
+            
+            $work_tag_where = WorkTag::where('work_id', $work->id);
+            if ($work_tag_where->exists()) {
+                $work_tag_where->delete();
+            }
+            foreach($tags as &$tag) {
+                $work_tag = new WorkTag();
+                $work_tag->fill([
+                    'work_id' => $work->id,
+                    'tag' => $tag,
+                ]);
+                $work_tag->save();
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        DB::commit();
     }
 
     /**
@@ -182,10 +239,11 @@ class WorkController extends Controller
         DB::beginTransaction();
         $work_query_where = Work::where('file_id', $file_id);
         if ($work_query_where->exists()) {
-            $work_query_where->delete();
             try {
+                $work_query_where->delete();
+                WorkTag::where('file_id', $file_id)->delete();
                 $this->googleDrive->files->delete($file_id);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
             }
             DB::commit();

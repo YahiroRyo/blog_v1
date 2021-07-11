@@ -46,9 +46,9 @@
           </v-dialog>
         </v-row>
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <!--    作成モード    -->
+        <!--    作成 || 編集 モード    -->
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <template v-else>
+        <template v-else-if="modeState == MODE.CREATE || modeState == MODE.EDIT">
           <div class="d-flex">
             <v-text-field
               class="mr-5"
@@ -101,7 +101,11 @@
               modeState == MODE.CREATE ? false : modeState == MODE.EDIT ? false : true
             "
             >{{
-              modeState == MODE.CREATE ? "作成" : modeState == MODE.EDIT ? "編集" : "None"
+              modeState == MODE.CREATE
+                ? "作成"
+                : modeState == MODE.EDIT
+                ? "編集を適応"
+                : "None"
             }}</v-btn
           >
         </template>
@@ -131,16 +135,16 @@
       <!--    作成した場合のダイアログ    -->
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <template v-if="isCreated">
-        <v-snackbar v-if="modeState == MODE.CREATE" v-model="isCreated">
-          {{ attribute == "blog" ? "ブログ" : "作品" }}を作成しました。
-          <template v-slot:action="{ attrs }">
-            <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
-        <v-snackbar v-else-if="modeState == MODE.DELETE" v-model="isCreated">
-          {{ attribute == "blog" ? "ブログ" : "作品" }}を削除しました。
+        <v-snackbar v-if="modeState != MODE.NONE" v-model="isCreated">
+          {{ attribute == "blog" ? "ブログ" : "作品" }}を{{
+            modeState == MODE.CREATE
+              ? "作成"
+              : modeState == MODE.EDIT
+              ? "編集"
+              : modeState == MODE.DELETE
+              ? "削除"
+              : ""
+          }}しました。
           <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
               Close
@@ -214,6 +218,7 @@ export default {
         tag: {
           objects: [] as Array<string>,
           tmp: "" as string,
+          enterCnt: 0 as number,
         },
       } as any,
     } as any;
@@ -232,9 +237,21 @@ export default {
       this.errorState = ERROR_CODE.NONE;
     },
     // タグを追加
-    addTag(this: { form: { tag: { objects: Array<string>; tmp: string } } }): void {
-      this.form.tag.objects.push(this.form.tag.tmp);
-      this.form.tag.tmp = "";
+    addTag(this: {
+      form: { tag: { objects: Array<string>; tmp: string; enterCnt: number } };
+    }): void {
+      if (this.form.tag.tmp.length != 0) {
+        this.form.tag.enterCnt++;
+        if (this.form.tag.enterCnt == 2) {
+          this.form.tag.objects.push(this.form.tag.tmp);
+          this.form.tag.enterCnt = 0;
+          this.form.tag.tmp = "";
+        } else {
+          setTimeout(() => {
+            this.form.tag.enterCnt = 0;
+          }, 1000);
+        }
+      }
     },
     // タグを削除
     deleteTag(this: { form: { tag: { objects: Array<string> } } }, index: number): void {
@@ -263,7 +280,7 @@ export default {
       };
       await $axios
         .$post(`/${this.attribute}/create`, param)
-        .then((responce) => {
+        .then(() => {
           this.isCreated = true;
           this.isAuth();
           setTimeout(() => {
@@ -275,7 +292,44 @@ export default {
           this.errorState = ERROR_CODE.CREATE;
         });
     },
-    edit(fileId: string): void {},
+    async edit(
+      this: {
+        pageState: CREATE_STATE;
+        errorState: ERROR_CODE;
+        attribute: string;
+        isCreated: boolean;
+        isAuth: Function;
+        form: {
+          title: string;
+          tag: { objects: Array<string> };
+          img: string;
+          md: string;
+        };
+      },
+      fileId: string
+    ): Promise<void> {
+      await this.isAuth();
+      const param = {
+        fileId: fileId,
+        title: this.form.title,
+        tags: this.form.tag.objects,
+        img: this.form.img,
+        md: this.form.md,
+      };
+      await $axios
+        .$post(`/${this.attribute}/edit`, param)
+        .then(() => {
+          this.isCreated = true;
+          this.pageState = CREATE_STATE.SUCCESS;
+          setTimeout(() => {
+            this.isCreated = false;
+          }, 3000);
+        })
+        .catch(() => {
+          this.pageState = CREATE_STATE.ERROR;
+          this.errorState = ERROR_CODE.CREATE;
+        });
+    },
     // 認証処理
     async auth(this: {
       pageState: CREATE_STATE;
@@ -340,9 +394,18 @@ export default {
   },
   async created(this: {
     isAuth: Function;
+    form: {
+      title: string;
+      tag: { objects: Array<string> };
+      img: string;
+      md: string;
+    };
     $store: Store<any>;
+    $axios: any;
     modeState: MODE;
     attribute: string;
+    fileId: string;
+    pageState: CREATE_STATE;
   }): Promise<void> {
     this.isAuth();
 
@@ -364,6 +427,21 @@ export default {
       titleAttribute = "作品";
     } else {
       titleAttribute = "NONE";
+    }
+    if (this.modeState == MODE.EDIT) {
+      this.pageState = CREATE_STATE.LOADING;
+      const param = {
+        params: {
+          fileId: this.fileId,
+        },
+      };
+      await $axios.$get(`/${this.attribute}/get`, param).then((result) => {
+        this.form.tag.objects = result.tags;
+        this.form.title = result.title;
+        this.form.img = result.img;
+        this.form.md = result.md;
+        this.pageState = CREATE_STATE.SUCCESS;
+      });
     }
     this.$store.commit("windowState/setTitle", `${titleAttribute}を${titleMode}`);
   },

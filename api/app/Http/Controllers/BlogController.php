@@ -140,10 +140,22 @@ class BlogController extends Controller
                 ['alt' => 'media'],
             );
             $blog = Blog::where('file_id', $fileId)
-                        ->first();
-            return json_encode(['isExists' => true, 'title' => $blog['title'], 'img' => $blog['img'], 'md' => $response->getBody()->getContents()]);
+                        ->with('blog_tag')
+                        ->first()
+                        ->toArray();
+            return json_encode([
+                'isExists' => true,
+                'title' => $blog['title'],
+                'img' => $blog['img'],
+                'md' => $response->getBody()->getContents(),
+                'tags' => array_map(
+                    function($tag) {
+                        unset($tag['blog_id']);
+                        return $tag['tag'];
+                    }, $blog['blog_tag'])
+                ]);
         } else {
-            return json_encode(['isExists' => false, 'title' => '', 'img' => '','md' => '']);
+            return json_encode(['isExists' => false, 'title' => '', 'img' => '','md' => '', 'tags' => []]);
         }
     }
 
@@ -155,7 +167,52 @@ class BlogController extends Controller
      */
     public function edit(Request $request)
     {
-        //
+        // $request->fileId ファイルID
+        // $request->title  タイトル
+        // $request->tags   タグ
+        // $request->img    画像URL
+        // $request->md     マークダウン
+        $fileId = $request->fileId;
+        $title = $request->title;
+        $tags = $request->tags;
+        $img = $request->img;
+        $md = $request->md;
+        DB::beginTransaction();
+        try {
+            $file = $this->googleDrive->files->get($fileId);
+            $this->googleDrive->files->update($fileId, new \Google_Service_Drive_DriveFile, [
+                'data' => $md,
+                'mimeType' => 'text/markdown',
+                'uploadType' => 'multipart',
+            ]);
+
+            $blog = Blog::where('file_id', $request->fileId)
+                ->first();
+            $blog->fill([
+                'title' => $title,
+                'img' => $img,
+                'md' => $md,
+            ]);
+            $blog->save();
+            
+            $blog_tag_where = BlogTag::where('blog_id', $blog->id);
+            if ($blog_tag_where->exists()) {
+                $blog_tag_where->delete();
+            }
+            foreach($tags as &$tag) {
+                $blog_tag = new BlogTag();
+                $blog_tag->fill([
+                    'blog_id' => $blog->id,
+                    'tag' => $tag,
+                ]);
+                $blog_tag->save();
+            }
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        DB::commit();
     }
 
     /**
@@ -183,8 +240,9 @@ class BlogController extends Controller
         DB::beginTransaction();
         $blog_query_where = Blog::where('file_id', $file_id);
         if ($blog_query_where->exists()) {
-            $blog_query_where->delete();
             try {
+                $blog_query_where->delete();
+                BlogTag::where('file_id', $file_id)->delete();
                 $this->googleDrive->files->delete($file_id);
             } catch (Exception $e) {
                 DB::rollback();
