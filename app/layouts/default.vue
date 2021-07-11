@@ -1,10 +1,14 @@
 <template>
   <v-app>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
     <TheHeader />
     <v-main>
       <v-container fluid>
         <transition name="router-anim">
-          <nuxt keep-alive />
+          <nuxt />
         </transition>
       </v-container>
     </v-main>
@@ -13,7 +17,6 @@
 </template>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
 body {
   font-family: "Noto Sans JP", system-ui;
 }
