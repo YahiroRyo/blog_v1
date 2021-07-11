@@ -8,25 +8,26 @@
           @click="$router.push('/')"
           >YAPPI BLOG</v-toolbar-title
         >
-        <template
-          v-for="(router, index) in routers"
-          v-if="
-            $store.state.windowState.scrollY == 0 &&
-            !$vuetify.breakpoint.mobile &&
-            !router.isHide
-          "
-        >
-          <v-scroll-y-reverse-transition>
-            <v-scroll-y-transition>
-              <div
-                class="black--text v-cursor-pointer ml-5"
-                @click="$router.push(router.to)"
-                :key="index"
-              >
-                {{ router.title }}
-              </div>
-            </v-scroll-y-transition>
-          </v-scroll-y-reverse-transition>
+        <template v-for="(router, index) in routers">
+          <template
+            v-if="
+              $store.state.windowState.scrollY == 0 &&
+              !$vuetify.breakpoint.mobile &&
+              !router.isHide
+            "
+          >
+            <v-scroll-y-reverse-transition :key="index">
+              <v-scroll-y-transition>
+                <div
+                  class="black--text v-cursor-pointer ml-5"
+                  @click="$router.push(router.to)"
+                  :key="index"
+                >
+                  {{ router.title }}
+                </div>
+              </v-scroll-y-transition>
+            </v-scroll-y-reverse-transition>
+          </template>
         </template>
         <v-spacer> </v-spacer>
         <v-scroll-y-reverse-transition>
@@ -58,25 +59,24 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list nav rounded>
-        <v-list-item
-          v-for="(router, index) in routers"
-          :key="index"
-          v-if="!router.isHide"
-          @click="$router.push(router.to)"
-        >
-          <v-icon>
-            {{ router.icon }}
-          </v-icon>
-          <v-list-item-title class="ml-3">{{ router.title }}</v-list-item-title>
-        </v-list-item>
+        <template v-for="(router, index) in routers">
+          <v-list-item
+            :key="index"
+            v-if="!router.isHide"
+            @click="$router.push(router.to)"
+          >
+            <v-icon>
+              {{ router.icon }}
+            </v-icon>
+            <v-list-item-title class="ml-3">{{ router.title }}</v-list-item-title>
+          </v-list-item>
+        </template>
       </v-list>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script lang="ts">
-import { Store } from "vuex";
-
 export default {
   data(this: { $ROUTERS: Array<any> }): any {
     return {
