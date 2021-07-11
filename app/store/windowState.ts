@@ -1,15 +1,15 @@
 export const state = () => ({
-    scrollX: 0 as Number,
-    scrollY: 0 as Number,
+    scrollX: 0 as number,
+    scrollY: 0 as number,
     title: '' as string,
     baseUrl: '' as string,
 });
 
 export const mutations = {
-  setScrollX(state: { scrollX: Number; }, scrollX: Number): void {
+  setScrollX(state: { scrollX: number; }, scrollX: number): void {
     state.scrollX = scrollX;
   },
-  setScrollY(state: { scrollY: Number; }, scrollY: Number): void {
+  setScrollY(state: { scrollY: number; }, scrollY: number): void {
     state.scrollY = scrollY;
   },
   setTitle(state: { title: string; }, title: string): void {
