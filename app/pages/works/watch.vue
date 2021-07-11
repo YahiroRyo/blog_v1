@@ -3,7 +3,7 @@
     <link href="/mdFileName.css" rel="stylesheet" />
     <v-row v-if="result.isExists" justify="center" align-content="center">
       <v-col :cols="$vuetify.breakpoint.mobile ? '12' : '10'">
-        <div v-html="$md.render(md)"></div>
+        <div v-html="$md.render(`[[toc]]\n${md}`)"></div>
       </v-col>
       <v-col
         :cols="$vuetify.breakpoint.mobile ? '12' : '2'"
@@ -99,11 +99,21 @@ export default {
     return $axios.get(`/${mode}/get`, param).then((res: any) => {
       const result = res.data;
       const md = result.md;
+      let keywords = "ヤッピーブログ,YAPPI BLOG,";
+      for (let i = 0; i < result.tags.length; i++) {
+        keywords += `${result.tags[i]}${i != result.tags.length - 1 ? "," : ""}`;
+      }
       store.commit("windowState/setTitle", result.title);
       const meta = {
-        description: result.md,
+        description: result.md
+          .replaceAll("#", "")
+          .replaceAll("\n", "")
+          .replaceAll("-", "")
+          .replaceAll("1.", "")
+          .replaceAll("~~.", ""),
         title: result.title,
         image: result.img,
+        keywords: keywords,
         url: "https://stupefied-ramanujan-ce7604.netlify.app" + route.fullPath,
       };
       return {
@@ -124,6 +134,7 @@ export default {
         title: this.meta.title,
         meta: [
           { hid: "description", name: "description", content: this.meta.description },
+          { hid: "keywords", name: "keywords", content: this.meta.keywords },
           {
             hid: "og:description",
             property: "og:description",
