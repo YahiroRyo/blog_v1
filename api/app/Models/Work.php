@@ -11,6 +11,7 @@ class Work extends Model
 {
     use HasFactory, Notifiable;
 
+    protected $primaryKey = 'id';
     protected $fillable = [
         'img',
         'title',

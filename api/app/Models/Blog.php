@@ -12,6 +12,7 @@ class Blog extends Model
 {
     use HasFactory, Notifiable;
 
+    protected $primaryKey = 'id';
     protected $fillable = [
         'title',
         'img',

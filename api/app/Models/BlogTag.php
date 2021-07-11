@@ -8,6 +8,8 @@ use App\Models\Blog;
 class BlogTag extends Model
 {
     public $timestamps = false;
+    
+    protected $primaryKey = 'blog_id';
     protected $fillable = [
         'blog_id',
         'tag',

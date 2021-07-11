@@ -8,6 +8,8 @@ use App\Models\Work;
 class WorkTag extends Model
 {
     public $timestamps = false;
+    protected $primaryKey = 'work_id';
+
     protected $fillable = [
         'work_id',
         'tag',
