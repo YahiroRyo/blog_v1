@@ -8,7 +8,6 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s | YAPPI BLOG',
-    title: 'YAPPI BLOG',
     htmlAttrs: {
       lang: 'ja'
     },
@@ -27,7 +26,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  serverMiddleware: ["~/middleware/response-header.ts"],
+  serverMiddleware: ["~/middleware/response-header.ts", 'redirect-ssl'],
   router: {
     middleware: "titleMiddleware",
     extendRoutes (routes, resolve) {
@@ -69,12 +68,6 @@ export default {
   modules: [
     '@nuxtjs/markdownit',
     '@nuxtjs/axios',
-    // ['@nuxtjs/google-adsense', {
-    //   id: 'ca-pub-3291128098360922',
-    //   pageLevelAds: true,
-    //   analyticsUacct: 'UA-XXX-X',
-    //   analyticsDomainName: 'https://stupefied-ramanujan-ce7604.netlify.app'
-    // }]
   ],
   markdownit: {
     preset: 'default',
