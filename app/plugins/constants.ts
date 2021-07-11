@@ -31,6 +31,12 @@ const ROUTERS = [
         isHide: false,
         title: '自己紹介',
     },
+    {
+        to: "/search-tag",
+        icon: '',
+        isHide: true,
+        title: 'タグで検索',
+    },
 ] as Array<any>
 
 export default (context: Context, inject: Function) => {
