@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/markdownit": "^2.0.0",
+    "@nuxtjs/vuetify": "^1.11.3",
     "@toycode/markdown-it-class": "^1.2.4",
     "@types/node": "^12.20.12",
     "core-js": "^3.9.1",
@@ -20,7 +21,7 @@
     "markdown-it-table-of-contents": "^0.5.2",
     "nuxt": "^2.15.7",
     "nuxt-typed-vuex": "^0.2.0",
-    "@nuxtjs/vuetify": "^1.11.3"
+    "redirect-ssl": "^3.0.0"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
