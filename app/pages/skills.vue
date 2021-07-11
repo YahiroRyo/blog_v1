@@ -48,6 +48,11 @@ export default {
           icon: "vuejs",
         },
         {
+          lang: "Nuxt.js",
+          explain: "Webの言語に興味があったため",
+          icon: "nuxt",
+        },
+        {
           lang: "PHP",
           explain: "Webの言語に興味があったため",
           icon: "language-php",
