@@ -39,7 +39,7 @@ class WorkController extends Controller
         $num = intval($request->num);
         $sum = intval($request->sum);
         
-        $works = Work::select(['id', 'file_id','title', 'img'])
+        $works = Work::select(['id', 'file_id','title', 'img', 'updated_at'])
             ->orderBy('id', 'desc')
             ->take($sum + $num)
             ->with('work_tag')
@@ -55,6 +55,7 @@ class WorkController extends Controller
                         return $tag['tag'];
                     }, $works[$i]['work_tag']
                 ),
+                'update' => $works[$i]['updated_at'],
                 'img' => $works[$i]['img'],
             ]);
         }
@@ -145,6 +146,7 @@ class WorkController extends Controller
                         ->toArray();
             return json_encode([
                 'isExists' => true,
+                'update' => $work['updated_at'],
                 'title' => $work['title'],
                 'img' => $work['img'],
                 'md' => $response->getBody()->getContents(),

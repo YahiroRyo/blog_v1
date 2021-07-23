@@ -39,7 +39,7 @@ class BlogController extends Controller
         $num = intval($request->num);
         $sum = intval($request->sum);
         
-        $blogs = Blog::select(['id', 'file_id','title', 'img'])
+        $blogs = Blog::select(['id', 'file_id','title', 'img', 'updated_at'])
             ->orderBy('id', 'desc')
             ->take($sum + $num)
             ->with('blog_tag')
@@ -55,6 +55,7 @@ class BlogController extends Controller
                     }, $blogs[$i]['blog_tag']
                 ),
                 'title' => $blogs[$i]['title'],
+                'update' => $blogs[$i]['updated_at'],
                 'img' => $blogs[$i]['img'],
             ]);
         }
@@ -145,6 +146,7 @@ class BlogController extends Controller
                         ->toArray();
             return json_encode([
                 'isExists' => true,
+                'update' => $blog['updated_at'],
                 'title' => $blog['title'],
                 'img' => $blog['img'],
                 'md' => $response->getBody()->getContents(),

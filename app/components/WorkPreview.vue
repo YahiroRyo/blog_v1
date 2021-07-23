@@ -15,8 +15,10 @@
         <v-card-text
           class="body-1 font-weight-bold"
           :class="{ 'orange--text': genre == 'blogs', 'green--text': genre == 'works' }"
+          style="padding-bottom: 0"
           >{{ genre[0].toUpperCase() + genre.slice(1) }}</v-card-text
         >
+        <v-card-text style="padding-top: 5px">{{ time }}更新</v-card-text>
         <v-card-title ref="cardTitle"
           ><span :style="` margin-bottom: ${$store.state.card.maxHeight / 2}px`">{{
             title
@@ -52,7 +54,7 @@
 import { Store } from "vuex";
 
 export default {
-  props: ["img", "title", "tags", "genre", "to"],
+  props: ["img", "title", "tags", "genre", "to", "time"],
   mounted(this: { $refs: { cardTitle: any; cardTags: any }; $store: Store<any> }): void {
     const titleHeight = this.$refs.cardTitle.clientHeight;
     const tagsHeight = this.$refs.cardTags.clientHeight;

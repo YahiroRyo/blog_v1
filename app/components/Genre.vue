@@ -17,6 +17,7 @@
           :tags="item.tags"
           :genre="genre"
           :to="`/${mode}/watch?fi=${item.fileId}`"
+          :time="item.update.split('T')[0]"
         />
       </v-col>
     </v-row>
@@ -86,6 +87,7 @@ export default {
         param.params.num = 50;
       }
       this.result = await $axios.$get(`/${this.mode}/get`, param);
+      console.log(this.result);
     }
   },
 };
