@@ -1,5 +1,10 @@
 <template>
   <v-row justify="center" align-content="center" style="height: 80vh">
+    <link rel="stylesheet" href="/atom-one-light.min.css" />
+    <script src="/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
     <v-col cols="10">
       <!--++++++++++++++++++++++++++++++++++++++++++++++++++++-->
       <!--    認証    -->
@@ -153,6 +158,9 @@
         </v-snackbar>
       </template>
     </v-col>
+    <component :is="'style'">
+      .theme--light.v-application code { background-color: #eee; }
+    </component>
   </v-row>
 </template>
 

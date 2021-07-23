@@ -1,21 +1,23 @@
 a:not(.table-of-contents *)::before {
-  content: '→ ';
+  content: "→ ";
 }
 a:not(.table-of-contents *) {
   background-color: white;
-  border: 2px solid #5CA7BB;
+  border: 2px solid #5ca7bb;
   color: black;
   display: block;
   padding: 20px;
   text-decoration: none;
-  transition: .3s;
+  transition: 0.3s;
   margin: 20px 0;
 }
 a:not(.table-of-contents *):hover {
-  background-color: #5CA7BB;
+  background-color: #5ca7bb;
   color: white;
 }
-a.absent { color: #cc0000; }
+a.absent {
+  color: #cc0000;
+}
 a.anchor {
   display: block;
   padding-left: 30px;
@@ -46,39 +48,53 @@ h2:hover a.anchor,
 h3:hover a.anchor,
 h4:hover a.anchor,
 h5:hover a.anchor,
-h6:hover a.anchor { text-decoration: none; }
+h6:hover a.anchor {
+  text-decoration: none;
+}
 
 h1 tt,
-h1 code { font-size: inherit; }
+h1 code {
+  font-size: inherit;
+}
 
 h2 tt,
-h2 code { font-size: inherit; }
+h2 code {
+  font-size: inherit;
+}
 
 h3 tt,
-h3 code { font-size: inherit; }
+h3 code {
+  font-size: inherit;
+}
 
 h4 tt,
-h4 code { font-size: inherit; }
+h4 code {
+  font-size: inherit;
+}
 
 h5 tt,
-h5 code { font-size: inherit; }
+h5 code {
+  font-size: inherit;
+}
 
 h6 tt,
-h6 code { font-size: inherit; }
+h6 code {
+  font-size: inherit;
+}
 
 h1 {
   font-size: 28px;
-  border-bottom: 1px solid #5CA7BB;
+  border-bottom: 1px solid #5ca7bb;
 }
 h2 {
   font-size: 24px;
-  border-bottom: 2px solid #5CA7BB;
+  border-bottom: 2px solid #5ca7bb;
   position: relative;
 }
 h2::after {
-  background-color: #75D5F0;
+  background-color: #75d5f0;
   border-radius: 5px;
-  content: '';
+  content: "";
   height: 70%;
   left: 0;
   position: absolute;
@@ -88,13 +104,13 @@ h2::after {
 }
 h3 {
   font-size: 20px;
-  margin: 15px 5px;
+  margin: 5px;
   position: relative;
 }
 h3::after {
-  background-color: #5CA7BB;
+  background-color: #5ca7bb;
   border-radius: 5px;
-  content: '';
+  content: "";
   height: 75%;
   left: -5px;
   position: absolute;
@@ -122,7 +138,9 @@ ol,
 dl,
 li,
 table,
-pre { margin: 15px 0; }
+pre {
+  margin: 15px 0;
+}
 
 hr {
   border: 0 none;
@@ -144,42 +162,51 @@ h2 p,
 h3 p,
 h4 p,
 h5 p,
-h6 p { margin-top: 0; }
+h6 p {
+  margin-top: 0;
+}
 
-li p.first { display: inline-block; }
-li { margin: 0; }
+li p.first {
+  display: inline-block;
+}
+li {
+  margin: 0;
+}
 
 ul {
   color: #666;
-  font-size: 18px;
-  padding: 25px;
-  border-radius: 16px;
-  border: 5px solid #5CA7BB;
+  font-size: 16px;
+  padding-left: 0 !important;
+  margin-top: 10px;
 }
 
 ul :first-child,
-ol :first-child { margin-top: 0; }
+ol :first-child {
+  margin-top: 0;
+}
 
 ul,
-ol { list-style-type: none; }
+ol {
+  list-style-type: none;
+}
 ol li::before {
-  content: '# ';
+  content: "# ";
   color: #999;
 }
-ul li::before { content: '・' }
-
+ul li::before {
+  content: "・";
+}
 
 .table-of-contents {
-  border-radius: 16px;
-  border: 5px solid #5CA7BB;
+  border-radius: 5px;
+  border: 3px solid #5ca7bb;
   position: relative;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
-  padding-top: 80px; 
+  padding-top: 80px;
 }
 .table-of-contents::after {
-  background-color: #5CA7BB;
+  background-color: #5ca7bb;
   color: white;
-  content: '目次';
+  content: "目次";
   font-size: 20px;
   text-align: center;
   top: 0;
@@ -193,7 +220,9 @@ ul li::before { content: '・' }
   text-decoration: none;
 }
 
-dl { padding: 0; }
+dl {
+  padding: 0;
+}
 
 dl dt {
   font-size: 14px;
@@ -202,22 +231,36 @@ dl dt {
   padding: 0;
   margin: 15px 0 5px;
 }
-dl dt:first-child { padding: 0; }
-dl dt > :first-child { margin-top: 0; }
-dl dt > :last-child { margin-bottom: 0; }
+dl dt:first-child {
+  padding: 0;
+}
+dl dt > :first-child {
+  margin-top: 0;
+}
+dl dt > :last-child {
+  margin-bottom: 0;
+}
 dl dd {
   margin: 0 0 15px;
   padding: 0 15px;
 }
-dl dd > :first-child { margin-top: 0; }
-dl dd > :last-child { margin-bottom: 0; }
+dl dd > :first-child {
+  margin-top: 0;
+}
+dl dd > :last-child {
+  margin-bottom: 0;
+}
 blockquote {
   border-left: 4px solid #dddddd;
   padding: 0 15px;
   color: #777777;
 }
-blockquote > :first-child { margin-top: 0; }
-blockquote > :last-child { margin-bottom: 0; }
+blockquote > :first-child {
+  margin-top: 0;
+}
+blockquote > :last-child {
+  margin-bottom: 0;
+}
 table {
   padding: 0;
   border-collapse: collapse;
@@ -228,7 +271,9 @@ table tr {
   margin: 0;
   padding: 0;
 }
-table tr:nth-child(2n) { background-color: #f8f8f8; }
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
 table tr th {
   font-weight: bold;
   border: 1px solid #cccccc;
@@ -241,12 +286,18 @@ table tr td {
   padding: 6px 13px;
 }
 table tr th :first-child,
-table tr td :first-child { margin-top: 0; }
+table tr td :first-child {
+  margin-top: 0;
+}
 
 table tr th :last-child,
-table tr td :last-child { margin-bottom: 0; }
+table tr td :last-child {
+  margin-bottom: 0;
+}
 
-img { max-width: 100%; }
+img {
+  max-width: 100%;
+}
 span.frame {
   display: block;
   overflow: hidden;
@@ -321,54 +372,21 @@ span.float-right > span {
   margin: 13px auto 0;
   text-align: right;
 }
-code,
-tt {
-  margin: 0 2px;
-  padding: 0 5px;
-  white-space: nowrap;
-  border: 1px solid #eaeaea;
-  background-color: #f8f8f8;
-  border-radius: 3px;
-}
-pre code {
-  margin: 0;
-  padding: 0;
-  white-space: pre;
-  border: none;
-  background: transparent;
-}
-.highlight pre {
-  background-color: #f8f8f8;
-  border: 1px solid #cccccc;
-  font-size: 13px;
-  line-height: 19px;
-  overflow: auto;
-  padding: 6px 10px;
-  border-radius: 3px;
-}
-pre {
-  background-color: #f8f8f8;
-  border: 1px solid #cccccc;
-  font-size: 13px;
-  line-height: 19px;
-  overflow: auto;
-  padding: 6px 10px;
-  border-radius: 3px;
-}
-pre code,
-pre tt {
-  background-color: transparent;
-  border: none;
-}
 sup {
   font-size: 0.83em;
   vertical-align: super;
   line-height: 0;
 }
-* { -webkit-print-color-adjust: exact; }
+* {
+  -webkit-print-color-adjust: exact;
+}
 @media print {
   table,
-  pre { page-break-inside: avoid; }
-  
-  pre { word-wrap: break-word; }
+  pre {
+    page-break-inside: avoid;
+  }
+
+  pre {
+    word-wrap: break-word;
+  }
 }

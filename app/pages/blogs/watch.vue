@@ -1,8 +1,19 @@
 <template>
   <div>
     <link href="/mdFileName.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/atom-one-light.min.css" />
+    <script src="/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
     <v-row v-if="result.isExists" justify="center" align-content="center">
       <v-col :cols="$vuetify.breakpoint.mobile ? '12' : '10'">
+        <v-card-title class="py-0 pr-0 pl-1 grey--text text--darken-3 subtitle-1"
+          >更新日</v-card-title
+        >
+        <v-card-text class="py-0 pr-0 pl-1 button">{{
+          result.update.split("T")[0]
+        }}</v-card-text>
         <div v-html="$md.render(`[[toc]]\n${md}`)"></div>
       </v-col>
       <v-col
@@ -36,6 +47,17 @@
               >mdi-twitter</v-icon
             >
           </v-card-actions>
+          <v-chip
+            color="#666"
+            class="ml-3 mr-1 mt-2"
+            draggable
+            outlined
+            pill
+            v-for="(tag, index) in result.tags"
+            :key="index"
+            @click.stop="$router.push(`/search-tag?tag=${tag}`)"
+            >{{ tag }}</v-chip
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -58,6 +80,9 @@
         </v-col>
       </v-row>
     </v-overlay>
+    <component :is="'style'">
+      .theme--light.v-application code { background-color: #eee; }
+    </component>
   </div>
 </template>
 
