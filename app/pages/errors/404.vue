@@ -9,10 +9,6 @@ import { Store } from "vuex";
 export default {
   created(this: { $store: Store<any> }): void {
     this.$store.commit("windowState/setTitle", "ページが見つかりません");
-    this.$store.commit(
-      "windowState/setDescription",
-      "YAPPIブログ | 404 エンジニアに役立つ情報をお届け(?) Laravel vue nuxt html css scss javascriptらへんやってます"
-    );
   },
 };
 </script>
