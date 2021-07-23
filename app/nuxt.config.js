@@ -1,4 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
+import redirectSSL from 'redirect-ssl';
+const axios = require('axios')
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -26,7 +28,10 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  serverMiddleware: ["~/middleware/response-header.ts", 'redirect-ssl'],
+  serverMiddleware: [
+    // "~/middleware/response-header.ts",
+    redirectSSL.create({enabled: process.env.NODE_ENV === 'production'}),
+  ],
   router: {
     middleware: "titleMiddleware",
     extendRoutes (routes, resolve) {
@@ -68,7 +73,51 @@ export default {
   modules: [
     '@nuxtjs/markdownit',
     '@nuxtjs/axios',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots',
   ],
+  robots: {
+    UserAgent: '*',
+    // sitemap.xmlのURLを記述
+    Sitemap: 'https://yappi-blog.herokuapp.com/sitemap.xml',
+  },
+  sitemap: {
+    path: '/sitemap.xml',
+    hostname: 'https://yappi-blog.herokuapp.com',
+    cacheTime: 1000 * 60 * (60 * 24),
+    generate: true,
+    gzip: true,
+    exclude: [
+      '/search-tag',
+      '/blogs/watch',
+      '/works/watch',
+      '/errors/404',
+      '/blogs/watch',
+      '/works/watch',
+    ],
+    async routes(callback) {
+      const param = {
+        params: {
+          num: 50,
+          sum: 0,
+        }
+      };
+      return Promise.all([
+        axios.get('https://yappi-blog.herokuapp.com/api/blogs/get', param),
+        axios.get('https://yappi-blog.herokuapp.com/api/works/get', param),
+      ])
+      .then(([blogs, works]) => {
+        let exp01 = blogs.data.map(contact => '/blogs/watch?fi=' + contact.fileId);
+        let exp02 = works.data.map(contact => '/works/watch?fi=' + contact.fileId);
+        let array = [exp01, exp02];
+        let flattened = array.reduce(
+          (accumulator, currentValue) => accumulator.concat(currentValue),
+          []
+        );
+        callback(null, flattened)
+      }).catch(callback)
+    }
+  },
   markdownit: {
     preset: 'default',
     html: true,
