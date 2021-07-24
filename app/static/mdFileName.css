@@ -141,6 +141,11 @@ table,
 pre {
   margin: 15px 0;
 }
+pre {
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
 
 hr {
   border: 0 none;
@@ -297,6 +302,8 @@ table tr td :last-child {
 
 img {
   max-width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
 }
 span.frame {
   display: block;
@@ -380,6 +387,7 @@ sup {
 * {
   -webkit-print-color-adjust: exact;
 }
+
 @media print {
   table,
   pre {

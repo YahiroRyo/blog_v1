@@ -1,11 +1,7 @@
 <template>
   <div>
+    <link rel="stylesheet" :href="`/${$store.state.style.highLightCss}`" />
     <link href="/mdFileName.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/atom-one-light.min.css" />
-    <script src="/highlight.min.js"></script>
-    <script>
-      hljs.initHighlightingOnLoad();
-    </script>
     <v-row v-if="result.isExists" justify="center" align-content="center">
       <v-col :cols="$vuetify.breakpoint.mobile ? '12' : '10'">
         <v-card-title class="py-0 pr-0 pl-1 grey--text text--darken-3 subtitle-1"
@@ -80,9 +76,6 @@
         </v-col>
       </v-row>
     </v-overlay>
-    <component :is="'style'">
-      .theme--light.v-application code { background-color: black; }
-    </component>
   </div>
 </template>
 
@@ -98,8 +91,6 @@
   position: sticky;
   top: 0;
   height: 100px;
-}
-.theme--light.v-application code {
 }
 </style>
 

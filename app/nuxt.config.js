@@ -50,6 +50,7 @@ export default {
   },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    { src: '~/node_modules/highlight.js/styles/atom-one-dark.css', lang: 'css' }
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -129,6 +130,18 @@ export default {
       listType: 'ol',
       containerClass: 'table-of-contents',
     }]],
+    highlight: (str, lang) => {
+      const hljs = require('highlight.js');
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return '<pre class="hljs"><code>' +
+                  hljs.highlight(lang, str, true).value +
+                  '</code></pre>';
+        } catch (__) {}
+      }
+      // 言語設定がない場合、プレーンテキストとして表示する
+      return '<pre class="hljs"><code>' +  hljs.highlight('plaintext', str, true).value + '</code></pre>';
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
