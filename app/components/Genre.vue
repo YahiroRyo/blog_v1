@@ -87,7 +87,6 @@ export default {
         param.params.num = 50;
       }
       this.result = await $axios.$get(`/${this.mode}/get`, param);
-      console.log(this.result);
     }
   },
 };
