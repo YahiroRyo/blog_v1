@@ -351,6 +351,7 @@ export default {
       await $axios.$post("/auth", param).then((responce) => {
         if (responce.is_auth) {
           this.pageState = CREATE_STATE.SUCCESS;
+          location.reload();
         } else {
           this.pageState = CREATE_STATE.ERROR;
           this.errorState = ERROR_CODE.AUTH;
@@ -391,7 +392,7 @@ export default {
     // 認証しているか
     async isAuth(this: { pageState: CREATE_STATE }): Promise<void> {
       this.pageState = CREATE_STATE.LOADING;
-      $axios.$get("/is-auth").then((responce: any) => {
+      await $axios.$get("/is-auth").then((responce: any) => {
         if (responce.is_auth) {
           this.pageState = CREATE_STATE.SUCCESS;
         } else {
@@ -415,43 +416,44 @@ export default {
     fileId: string;
     pageState: CREATE_STATE;
   }): Promise<void> {
-    this.isAuth();
+    if (process.client) {
+      await this.isAuth();
+      let titleMode = "" as string;
+      let titleAttribute = "" as string;
+      if (this.modeState == MODE.CREATE) {
+        titleMode = "作成";
+      } else if (this.modeState == MODE.EDIT) {
+        titleMode = "編集";
+      } else if (this.modeState == MODE.DELETE) {
+        titleMode = "削除";
+      } else {
+        titleMode = "NONE";
+      }
 
-    let titleMode = "" as string;
-    let titleAttribute = "" as string;
-    if (this.modeState == MODE.CREATE) {
-      titleMode = "作成";
-    } else if (this.modeState == MODE.EDIT) {
-      titleMode = "編集";
-    } else if (this.modeState == MODE.DELETE) {
-      titleMode = "削除";
-    } else {
-      titleMode = "NONE";
+      if (this.attribute == "blog") {
+        titleAttribute = "ブログ";
+      } else if (this.attribute == "work") {
+        titleAttribute = "作品";
+      } else {
+        titleAttribute = "NONE";
+      }
+      if (this.modeState == MODE.EDIT && this.pageState == CREATE_STATE.SUCCESS) {
+        this.pageState = CREATE_STATE.LOADING;
+        const param = {
+          params: {
+            fileId: this.fileId,
+          },
+        };
+        await $axios.$get(`/${this.attribute}/get`, param).then((result) => {
+          this.form.tag.objects = result.tags;
+          this.form.title = result.title;
+          this.form.img = result.img;
+          this.form.md = result.md;
+          this.pageState = CREATE_STATE.SUCCESS;
+        });
+      }
+      this.$store.commit("windowState/setTitle", `${titleAttribute}を${titleMode}`);
     }
-
-    if (this.attribute == "blog") {
-      titleAttribute = "ブログ";
-    } else if (this.attribute == "work") {
-      titleAttribute = "作品";
-    } else {
-      titleAttribute = "NONE";
-    }
-    if (this.modeState == MODE.EDIT) {
-      this.pageState = CREATE_STATE.LOADING;
-      const param = {
-        params: {
-          fileId: this.fileId,
-        },
-      };
-      await $axios.$get(`/${this.attribute}/get`, param).then((result) => {
-        this.form.tag.objects = result.tags;
-        this.form.title = result.title;
-        this.form.img = result.img;
-        this.form.md = result.md;
-        this.pageState = CREATE_STATE.SUCCESS;
-      });
-    }
-    this.$store.commit("windowState/setTitle", `${titleAttribute}を${titleMode}`);
   },
 };
 </script>
