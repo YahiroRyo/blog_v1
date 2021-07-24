@@ -5,7 +5,6 @@
   </div>
 </template>
 <script lang="ts">
-import { Store } from "vuex";
 const Genre = () => import("~/components/Genre.vue");
 const Title = () => import("~/components/Title.vue");
 
