@@ -48,13 +48,18 @@ export default {
       title: this.$store.state.windowState.title,
     };
   },
-  data(this: { $ROUTERS: Array<any> }): any {
+  data(this: { $ROUTERS: Array<any>, $route: any }): any {
     return {
       header: {
         isClickNavIcon: false as boolean,
       },
       routers: this.$ROUTERS as Array<any>,
     };
+  },
+  watch: {
+    '$route': () => {
+      window.scrollTo(0, 0);
+    }
   },
   methods: {
     scrollHandle(this: { $store: any }): void {
