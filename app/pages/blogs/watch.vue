@@ -1,6 +1,5 @@
 <template>
   <div>
-    <link rel="stylesheet" :href="`/${$store.state.style.highLightCss}`" />
     <link href="/mdFileName.css" rel="stylesheet" />
     <v-row v-if="result.isExists" justify="center" align-content="center">
       <v-col :cols="$vuetify.breakpoint.mobile ? '12' : '10'">
