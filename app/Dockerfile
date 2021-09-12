@@ -6,15 +6,7 @@ yarn add \
 @vue/cli-service-global \
 nuxt \
 create-nuxt-app \
-@nuxt/types \
-@nuxt/typescript-build \
-@nuxtjs/axios \
-nuxt-typed-vuex \
-@nuxtjs/markdownit \
-markdown-it-attrs \
-markdown-it-div \
-markdown-it-anchor \
-markdown-it-table-of-contents
+nuxt-typed-vuex
 
 RUN mkdir /home/app
 WORKDIR /home/app
