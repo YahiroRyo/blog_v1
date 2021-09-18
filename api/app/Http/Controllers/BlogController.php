@@ -243,8 +243,8 @@ class BlogController extends Controller
         $blog_query_where = Blog::where('file_id', $file_id);
         if ($blog_query_where->exists()) {
             try {
-                $blog_query_where->delete();
-                BlogTag::where('file_id', $file_id)->delete();
+                $blog_id = $blog_query_where->delete();
+                BlogTag::where('blog_id', $blog_id)->delete();
                 $this->googleDrive->files->delete($file_id);
             } catch (Exception $e) {
                 DB::rollback();
