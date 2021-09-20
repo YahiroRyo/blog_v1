@@ -30,7 +30,7 @@ export default {
   },
   serverMiddleware: [
     // "~/middleware/response-header.ts",
-    redirectSSL.create({enabled: process.env.NODE_ENV === 'production'}),
+    // redirectSSL.create({enabled: process.env.NODE_ENV === 'production'}),
   ],
   router: {
     middleware: "titleMiddleware",
