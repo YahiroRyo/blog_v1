@@ -1,5 +1,5 @@
 version: 0.0
 os: linux
 files:
-  - source: /app/*
-    destination: /home/ec2-user
+  - source: /app/Dockerfile
+    destination: /home/ec2-user/
