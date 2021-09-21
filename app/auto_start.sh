@@ -1,0 +1,2 @@
+cd ~/
+nohup npm start
