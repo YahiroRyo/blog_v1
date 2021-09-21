@@ -1,5 +1,5 @@
 version: 0.0
 os: linux
 files:
-  - source: /app/appspec.yml
+  - source: /app/Dockerfile
     destination: /home/ec2-user/
