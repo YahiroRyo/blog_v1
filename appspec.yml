@@ -4,6 +4,7 @@ files:
   - source: /
     destination: /home/ec2-user/tmp/
 hooks:
+  BeforeInstall:
   AfterInstall:
      – location: scripts/after_install.sh
        timeout: 180
