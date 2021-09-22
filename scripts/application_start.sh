@@ -4,9 +4,9 @@ FILE="auto_start.sh"
 cd /home/ec2-user
 
 if [ -e $FILE ]; then
-  if [[ -s ~/.nvm/nvm.sh ]] ; then
-    source ~/.nvm/nvm.sh ;
-  fi
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
   npm install
   su -l ec2-user -c "sh ~/auto_start.sh"
 else
