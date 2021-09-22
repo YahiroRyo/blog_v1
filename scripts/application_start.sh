@@ -4,13 +4,8 @@ FILE="auto_start.sh"
 cd /home/ec2-user
 
 if [ -e $FILE ]; then
-  sudo yum -y install apt
-  apt update
-  apt install nodejs -y
-  apt install npm -y
-  npm i npm@latest -g
-  npm i n -g
-  npm install
+  export NVM_DIR="$HOME/.nvm"
+  su -l ec2-user -c "sh $NVM_DIR/nvm.sh" 
   su -l ec2-user -c "sh ~/auto_start.sh"
 else
   cd /var/www
