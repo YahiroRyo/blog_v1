@@ -5,6 +5,6 @@ files:
     destination: /home/ec2-user/tmp/
 hooks:
   ApplicationStart:
-  – location: /scripts/after_install
-    timeout: 60
-    runas: root
+    - location: /scripts/after_install
+      timeout: 60
+      runas: root
