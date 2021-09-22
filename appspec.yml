@@ -5,4 +5,4 @@ files:
     destination: /home/ec2-user/tmp/
 hooks:
   AfterInstall:
-     – location: scripts/after_install
+     – location: /scripts/after_install
