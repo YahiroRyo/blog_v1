@@ -3,8 +3,3 @@ os: linux
 files:
   - source: /
     destination: /home/ec2-user/tmp/
-hooks:
-  AfterInstall:
-     – location: scripts/after_install.sh
-       timeout: 180
-       runas: root
