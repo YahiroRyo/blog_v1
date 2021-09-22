@@ -5,7 +5,7 @@ cd /home/ec2-user
 
 if [ -e $FILE ]; then
   source /home/ec2-user/.bash_profile
-  npm install
+  node --max-old-space-size=1000 $(which npm) install
   sudo sh ~/auto_start.sh
 else
   cd /var/www
