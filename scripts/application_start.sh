@@ -4,6 +4,7 @@ FILE="auto_start.sh"
 cd /home/ec2-user
 
 if [ -e $FILE ]; then
+  sudo yum -y install apt
   apt update
   apt install nodejs -y
   apt install npm -y
