@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Work;
 use App\Models\WorkTag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WorkController extends Controller
@@ -23,9 +22,11 @@ class WorkController extends Controller
         return new \Google_Service_Drive($client);
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->googleDrive = $this->getDriveClient();
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,8 +39,8 @@ class WorkController extends Controller
         $result = [];
         $num = intval($request->num);
         $sum = intval($request->sum);
-        
-        $works = Work::select(['id', 'file_id','title', 'img', 'updated_at'])
+
+        $works = Work::select(['id', 'file_id', 'title', 'img', 'updated_at'])
             ->orderBy('id', 'desc')
             ->take($sum + $num)
             ->with('work_tag')
@@ -48,17 +49,20 @@ class WorkController extends Controller
         for ($i = $sum; $i < (count($works) < $sum + $num ? count($works) : $sum + $num); $i++) {
             array_push($result, [
                 'fileId' => $works[$i]['file_id'],
-                'title' => $works[$i]['title'],
-                'tags' => array_map(
-                    function($tag){
+                'title'  => $works[$i]['title'],
+                'tags'   => array_map(
+                    function ($tag) {
                         unset($tag['work_id']);
+
                         return $tag['tag'];
-                    }, $works[$i]['work_tag']
+                    },
+                    $works[$i]['work_tag']
                 ),
                 'update' => $works[$i]['updated_at'],
-                'img' => $works[$i]['img'],
+                'img'    => $works[$i]['img'],
             ]);
         }
+
         return $result;
     }
 
@@ -81,30 +85,31 @@ class WorkController extends Controller
         DB::beginTransaction();
         $file = $this->googleDrive->files->create(
             new \Google_Service_Drive_DriveFile([
-                'name' => $title.'.md',
+                'name'     => $title.'.md',
                 'mimeType' => 'text/markdown',
-                'driveId' => '1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu',
-                'parents' => ['1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu'],
+                'driveId'  => '1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu',
+                'parents'  => ['1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu'],
             ]),
             [
-                'data' => $md,
-                'fields' => 'id',
+                'data'              => $md,
+                'fields'            => 'id',
                 'supportsAllDrives' => true,
             ]
         );
+
         try {
             $work = new Work();
             $work->fill([
-                'img' => $img,
-                'title' => $title,
+                'img'     => $img,
+                'title'   => $title,
                 'file_id' => $file->id,
             ]);
             $work->save();
-            foreach($tags as &$tag) {
+            foreach ($tags as &$tag) {
                 $workTag = new WorkTag();
                 $workTag->fill([
                     'work_id' => $work->id,
-                    'tag' => $tag,
+                    'tag'     => $tag,
                 ]);
                 $workTag->save();
             }
@@ -117,7 +122,8 @@ class WorkController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -128,7 +134,8 @@ class WorkController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -144,27 +151,32 @@ class WorkController extends Controller
                         ->with('work_tag')
                         ->first()
                         ->toArray();
+
             return json_encode([
                 'isExists' => true,
-                'update' => $work['updated_at'],
-                'title' => $work['title'],
-                'img' => $work['img'],
-                'md' => $response->getBody()->getContents(),
-                'tags' => array_map(
-                    function($tag) {
+                'update'   => $work['updated_at'],
+                'title'    => $work['title'],
+                'img'      => $work['img'],
+                'md'       => $response->getBody()->getContents(),
+                'tags'     => array_map(
+                    function ($tag) {
                         unset($tag['work_id']);
+
                         return $tag['tag'];
-                    }, $work['work_tag'])
-                ]);
+                    },
+                    $work['work_tag']
+                ),
+            ]);
         } else {
-            return json_encode(['isExists' => false, 'title' => '', 'img' => '','md' => '', 'tags' => []]);
+            return json_encode(['isExists' => false, 'title' => '', 'img' => '', 'md' => '', 'tags' => []]);
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -180,11 +192,12 @@ class WorkController extends Controller
         $img = $request->img;
         $md = $request->md;
         DB::beginTransaction();
+
         try {
             $file = $this->googleDrive->files->get($fileId);
-            $this->googleDrive->files->update($fileId, new \Google_Service_Drive_DriveFile, [
-                'data' => $md,
-                'mimeType' => 'text/markdown',
+            $this->googleDrive->files->update($fileId, new \Google_Service_Drive_DriveFile(), [
+                'data'       => $md,
+                'mimeType'   => 'text/markdown',
                 'uploadType' => 'multipart',
             ]);
 
@@ -192,25 +205,26 @@ class WorkController extends Controller
                 ->first();
             $work->fill([
                 'title' => $title,
-                'img' => $img,
-                'md' => $md,
+                'img'   => $img,
+                'md'    => $md,
             ]);
             $work->save();
-            
+
             $work_tag_where = WorkTag::where('work_id', $work->id);
             if ($work_tag_where->exists()) {
                 $work_tag_where->delete();
             }
-            foreach($tags as &$tag) {
+            foreach ($tags as &$tag) {
                 $work_tag = new WorkTag();
                 $work_tag->fill([
                     'work_id' => $work->id,
-                    'tag' => $tag,
+                    'tag'     => $tag,
                 ]);
                 $work_tag->save();
             }
         } catch (\Exception $e) {
             DB::rollback();
+
             throw new \Exception($e->getMessage());
         }
         DB::commit();
@@ -219,8 +233,9 @@ class WorkController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -231,7 +246,8 @@ class WorkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function delete(Request $request): void
@@ -250,7 +266,7 @@ class WorkController extends Controller
             }
             DB::commit();
         } else {
-            throw new \Exception("そのfileIdは存在しません");
+            throw new \Exception('そのfileIdは存在しません');
         }
     }
 }

@@ -15,7 +15,7 @@ class CreateWorkTagsTable extends Migration
     {
         Schema::create('work_tags', function (Blueprint $table) {
             $table->integer('work_id')->unsigned();
-            $table->string("tag", 30);
+            $table->string('tag', 30);
         });
     }
 

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Blog;
 use App\Models\BlogTag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
@@ -23,9 +22,11 @@ class BlogController extends Controller
         return new \Google_Service_Drive($client);
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->googleDrive = $this->getDriveClient();
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,8 +39,8 @@ class BlogController extends Controller
         $result = [];
         $num = intval($request->num);
         $sum = intval($request->sum);
-        
-        $blogs = Blog::select(['id', 'file_id','title', 'img', 'updated_at'])
+
+        $blogs = Blog::select(['id', 'file_id', 'title', 'img', 'updated_at'])
             ->orderBy('id', 'desc')
             ->take($sum + $num)
             ->with('blog_tag')
@@ -48,15 +49,17 @@ class BlogController extends Controller
         for ($i = $sum; $i < (count($blogs) < $sum + $num ? count($blogs) : $sum + $num); $i++) {
             array_push($result, [
                 'fileId' => $blogs[$i]['file_id'],
-                'tags' => array_map(
-                    function($tag){
+                'tags'   => array_map(
+                    function ($tag) {
                         unset($tag['blog_id']);
+
                         return $tag['tag'];
-                    }, $blogs[$i]['blog_tag']
+                    },
+                    $blogs[$i]['blog_tag']
                 ),
-                'title' => $blogs[$i]['title'],
+                'title'  => $blogs[$i]['title'],
                 'update' => $blogs[$i]['updated_at'],
-                'img' => $blogs[$i]['img'],
+                'img'    => $blogs[$i]['img'],
             ]);
         }
 
@@ -81,30 +84,31 @@ class BlogController extends Controller
         DB::beginTransaction();
         $file = $this->googleDrive->files->create(
             new \Google_Service_Drive_DriveFile([
-                'name' => $title.'.md',
+                'name'     => $title.'.md',
                 'mimeType' => 'text/markdown',
-                'driveId' => '1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu',
-                'parents' => ['1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu'],
+                'driveId'  => '1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu',
+                'parents'  => ['1Y7nsnEz3gXbARJiRBxCWcMJXcADvtKVu'],
             ]),
             [
-                'data' => $md,
-                'fields' => 'id',
+                'data'              => $md,
+                'fields'            => 'id',
                 'supportsAllDrives' => true,
             ]
         );
+
         try {
             $blog = new Blog();
             $blog->fill([
-                'img' => $img,
-                'title' => $title,
+                'img'     => $img,
+                'title'   => $title,
                 'file_id' => $file->id,
             ]);
             $blog->save();
-            foreach($tags as &$tag) {
+            foreach ($tags as &$tag) {
                 $blogTag = new BlogTag();
                 $blogTag->fill([
                     'blog_id' => $blog->id,
-                    'tag' => $tag,
+                    'tag'     => $tag,
                 ]);
                 $blogTag->save();
             }
@@ -117,18 +121,19 @@ class BlogController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -144,27 +149,32 @@ class BlogController extends Controller
                         ->with('blog_tag')
                         ->first()
                         ->toArray();
+
             return json_encode([
                 'isExists' => true,
-                'update' => $blog['updated_at'],
-                'title' => $blog['title'],
-                'img' => $blog['img'],
-                'md' => $response->getBody()->getContents(),
-                'tags' => array_map(
-                    function($tag) {
+                'update'   => $blog['updated_at'],
+                'title'    => $blog['title'],
+                'img'      => $blog['img'],
+                'md'       => $response->getBody()->getContents(),
+                'tags'     => array_map(
+                    function ($tag) {
                         unset($tag['blog_id']);
+
                         return $tag['tag'];
-                    }, $blog['blog_tag'])
-                ]);
+                    },
+                    $blog['blog_tag']
+                ),
+            ]);
         } else {
-            return json_encode(['isExists' => false, 'title' => '', 'img' => '','md' => '', 'tags' => []]);
+            return json_encode(['isExists' => false, 'title' => '', 'img' => '', 'md' => '', 'tags' => []]);
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -180,11 +190,12 @@ class BlogController extends Controller
         $img = $request->img;
         $md = $request->md;
         DB::beginTransaction();
+
         try {
             $file = $this->googleDrive->files->get($fileId);
-            $this->googleDrive->files->update($fileId, new \Google_Service_Drive_DriveFile, [
-                'data' => $md,
-                'mimeType' => 'text/markdown',
+            $this->googleDrive->files->update($fileId, new \Google_Service_Drive_DriveFile(), [
+                'data'       => $md,
+                'mimeType'   => 'text/markdown',
                 'uploadType' => 'multipart',
             ]);
 
@@ -192,26 +203,26 @@ class BlogController extends Controller
                 ->first();
             $blog->fill([
                 'title' => $title,
-                'img' => $img,
-                'md' => $md,
+                'img'   => $img,
+                'md'    => $md,
             ]);
             $blog->save();
-            
+
             $blog_tag_where = BlogTag::where('blog_id', $blog->id);
             if ($blog_tag_where->exists()) {
                 $blog_tag_where->delete();
             }
-            foreach($tags as &$tag) {
+            foreach ($tags as &$tag) {
                 $blog_tag = new BlogTag();
                 $blog_tag->fill([
                     'blog_id' => $blog->id,
-                    'tag' => $tag,
+                    'tag'     => $tag,
                 ]);
                 $blog_tag->save();
             }
-            
         } catch (\Exception $e) {
             DB::rollback();
+
             throw new \Exception($e->getMessage());
         }
         DB::commit();
@@ -220,8 +231,9 @@ class BlogController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -232,7 +244,8 @@ class BlogController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function delete(Request $request): void
@@ -251,7 +264,7 @@ class BlogController extends Controller
             }
             DB::commit();
         } else {
-            throw new \Exception("そのfileIdは存在しません");
+            throw new \Exception('そのfileIdは存在しません');
         }
     }
 }
