@@ -5,7 +5,7 @@ cd /home/ec2-user
 
 if [ -e $FILE ]; then
   source /home/ec2-user/.bash_profile
-  node --max-old-space-size=128 $(which npm) install
+  node --max-old-space-size=5120 $(which npm) install
 else
   cd /var/www
   composer update
