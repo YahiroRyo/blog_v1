@@ -4,12 +4,7 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | sh && \
 yarn add \
 @vue/cli \
 @vue/cli-service-global \
-nuxt \
-create-nuxt-app \
-@nuxt/types \
-@nuxt/typescript-build \
-@nuxtjs/axios \
-nuxt-typed-vuex
+create-nuxt-app
 
 RUN mkdir /home/app
 WORKDIR /home/app
