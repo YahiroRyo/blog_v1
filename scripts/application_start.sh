@@ -4,9 +4,8 @@ FILE="auto_start.sh"
 cd /home/ec2-user
 
 if [ -e $FILE ]; then
-  source /home/ec2-user/.bash_profile
   node --max-old-space-size=256 $(which npm) install
-  sudo sh ~/auto_start.sh
+  sudo -l ec2-user -c "sh ~/auto_start.sh"
 else
   cd /var/www
   composer update
