@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use App\Models\WorkTag;
 
 class Work extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -17,7 +17,9 @@ class Work extends Model
         'title',
         'file_id',
     ];
-    public function work_tag() {
+
+    public function work_tag()
+    {
         return $this->hasMany(WorkTag::class);
     }
 }

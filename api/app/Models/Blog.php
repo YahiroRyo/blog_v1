@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use App\Models\BlogTag;
-
 
 class Blog extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -18,7 +17,9 @@ class Blog extends Model
         'img',
         'file_id',
     ];
-    public function blog_tag() {
+
+    public function blog_tag()
+    {
         return $this->hasMany(BlogTag::class);
     }
 }
