@@ -10,15 +10,17 @@ class ForceHttps
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if (\App::environment(['production']) && $_SERVER["HTTP_X_FORWARDED_PROTO"] != 'https') {
-          return redirect()->secure($request->getRequestUri());
+        if (\App::environment(['production']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https') {
+            return redirect()->secure($request->getRequestUri());
         }
+
         return $next($request);
     }
 }
