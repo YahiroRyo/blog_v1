@@ -15,7 +15,7 @@ class CreateBlogTagsTable extends Migration
     {
         Schema::create('blog_tags', function (Blueprint $table) {
             $table->integer('blog_id')->unsigned();
-            $table->string("tag", 30);
+            $table->string('tag', 30);
         });
     }
 
