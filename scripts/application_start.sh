@@ -10,4 +10,5 @@ else
   cd /var/www
   composer update
   composer install
+  sudo chmod 777 -R *
 fi
