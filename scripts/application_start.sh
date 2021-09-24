@@ -7,7 +7,8 @@ if [ -e $FILE ]; then
   source /home/ec2-user/.bash_profile
   npm install
   ps aux | grep "npm start" | awk '{ print "kill -9", $2}' | sh
-  npm start
+  nohup npm start
+  exit 0
 else
   cd /var/www
   composer update
