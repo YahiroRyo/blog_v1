@@ -175,11 +175,4 @@ export default {
       }
     }
   },
-  axios: {
-    proxy: true,
-    prefix: '/api/',
-  },
-  proxy: {
-    '/api/': {target: process.env.API_URL, pathRewrite: {'^/api/': '/'}}
-  },
 }

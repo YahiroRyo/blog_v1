@@ -1,15 +1,25 @@
 version: '3'
 services:
-    nginx_blog:
-        container_name: nginx_blog
+    api_nginx_blog:
+        container_name: api_nginx_blog
         image: nginx
         ports:
             - 8080:80
         volumes:
             - ./api:/var/www/html
-            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx_api/default.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - api_blog
+    app_nginx_blog:
+        container_name: app_nginx_blog
+        image: nginx
+        ports:
+            - 8000:80
+        volumes:
+            - ./api:/var/www/html
+            - ./nginx_app/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app_blog
     api_blog:
         build: ./api
         container_name: api_blog
@@ -18,7 +28,7 @@ services:
         depends_on:
             - db_blog
     app_blog:
-        build: ./app
+        build: ./app    
         container_name: app_blog
         tty: true
         volumes:
@@ -26,8 +36,6 @@ services:
         environment:
             PORT: '80'
             HOST: '0.0.0.0'
-        ports:
-            - 8000:80
     db_blog:
         image: mysql:5.7
         container_name: db_blog
